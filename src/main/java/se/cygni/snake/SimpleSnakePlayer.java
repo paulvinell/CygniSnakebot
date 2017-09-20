@@ -32,11 +32,13 @@ public class SimpleSnakePlayer extends BaseSnakeClient {
     private static  final int SERVER_PORT = 80;
 
     private static final GameMode GAME_MODE = GameMode.TRAINING;
-    private static final String SNAKE_NAME = "The Simple Snake";
+    private static final String SNAKE_NAME = "Marklyft";
 
     // Set to false if you don't want the game world printed every game tick.
     private static final boolean ANSI_PRINTER_ACTIVE = false;
     private AnsiPrinter ansiPrinter = new AnsiPrinter(ANSI_PRINTER_ACTIVE, true);
+
+    private Tick tick;
 
     public static void main(String[] args) {
         SimpleSnakePlayer simpleSnakePlayer = new SimpleSnakePlayer();
@@ -81,23 +83,25 @@ public class SimpleSnakePlayer extends BaseSnakeClient {
         // MapUtil contains lot's of useful methods for querying the map!
         MapUtil mapUtil = new MapUtil(mapUpdateEvent.getMap(), getPlayerId());
 
-        List<SnakeDirection> directions = new ArrayList<>();
+        tick.onMapUpdate(mapUpdateEvent);
 
-        // Let's see in which directions I can move
-        for (SnakeDirection direction : SnakeDirection.values()) {
-            if (mapUtil.canIMoveInDirection(direction)) {
-                directions.add(direction);
-            }
-        }
-        Random r = new Random();
-        SnakeDirection chosenDirection = SnakeDirection.DOWN;
-
-        // Choose a random direction
-        if (!directions.isEmpty())
-            chosenDirection = directions.get(r.nextInt(directions.size()));
-
-        // Register action here!
-        registerMove(mapUpdateEvent.getGameTick(), chosenDirection);
+//        List<SnakeDirection> directions = new ArrayList<>();
+//
+//        // Let's see in which directions I can move
+//        for (SnakeDirection direction : SnakeDirection.values()) {
+//            if (mapUtil.canIMoveInDirection(direction)) {
+//                directions.add(direction);
+//            }
+//        }
+//        Random r = new Random();
+//        SnakeDirection chosenDirection = SnakeDirection.DOWN;
+//
+//        // Choose a random direction
+//        if (!directions.isEmpty())
+//            chosenDirection = directions.get(r.nextInt(directions.size()));
+//
+//        // Register action here!
+//        registerMove(mapUpdateEvent.getGameTick(), chosenDirection);
     }
 
 
@@ -159,6 +163,8 @@ public class SimpleSnakePlayer extends BaseSnakeClient {
 
     @Override
     public void onConnected() {
+      this.tick = new Tick(this);
+
         LOGGER.info("Connected, registering for training...");
         GameSettings gameSettings = GameSettingsUtils.trainingWorld();
         registerForGame(gameSettings);
