@@ -1,11 +1,8 @@
 package se.cygni.snake;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import se.cygni.snake.api.model.GameSettings;
-import se.cygni.snake.api.model.SnakeInfo;
-import se.cygni.snake.behaviors.AvoidCorridorBehavior;
 import se.cygni.snake.behaviors.DirectAntiSnakeCollisionBehavior;
 import se.cygni.snake.behaviors.AreaBehavior;
 import se.cygni.snake.behaviors.AreaWiggleRoomBehavior;
@@ -16,7 +13,6 @@ import se.cygni.snake.behaviors.SnakeAmountBehavior;
 import se.cygni.snake.behaviors.WiggleRoomBehavior;
 import se.cygni.snake.api.event.MapUpdateEvent;
 import se.cygni.snake.api.model.SnakeDirection;
-import se.cygni.snake.client.MapCoordinate;
 import se.cygni.snake.client.MapUtil;
 import se.cygni.snake.utility.Area;
 import se.cygni.snake.utility.Coordinates;
@@ -28,6 +24,10 @@ public class Tick {
   /**
    * To do:
    *
+   * http://game.snake.cygni.se/#/viewgame/d63edd72-d65d-4eba-ae2c-c988467532f7?_k=wsjedn
+   * Very very simple, add a behavior that penalizes walking to tiles that enemies' only option is to go to.
+   * Check where they can go, if it's only one tile. Penalize
+   *
    * Pathfinding
    * Find the point which is furthest away from all enemies
    * Constantly move toward that point if possible
@@ -35,6 +35,8 @@ public class Tick {
    * Add Indirect collision avoidance
    * Definitely add corridor avoidance
    * Penalize closed corridors even more
+   *
+   * http://game.snake.cygni.se/#/viewgame/d2b919b4-d95d-4a3a-a38e-919e13aceb26?_k=fdcujp
    *
    * dont just calculate areas, calculate rooms too
    *
@@ -95,11 +97,9 @@ public class Tick {
     new SnakeAmountBehavior(this);
     new IndirectAntiSnakeCollisionBehavior(this);
     new WiggleRoomBehavior(this);
-
-//    new AvoidCorridorBehavior(this);
   }
 
-  public void onMapUpdate(final MapUpdateEvent mapUpdateEvent) {
+  public final void onMapUpdate(final MapUpdateEvent mapUpdateEvent) {
     long nano = System.nanoTime();
 
     this.mapUpdateEvent = mapUpdateEvent;
@@ -125,6 +125,6 @@ public class Tick {
 
     ssp.registerMove(mapUpdateEvent.getGameTick(), direction);
 
-    System.out.println((System.nanoTime() - nano) / Math.pow(10, 9));
+    //System.out.println((System.nanoTime() - nano) / Math.pow(10, 9));
   }
 }

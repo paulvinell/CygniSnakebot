@@ -3,6 +3,7 @@ package se.cygni.snake.behaviors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.WeakHashMap;
 import se.cygni.snake.SimpleSnakePlayer;
 import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.SnakeDirection;
@@ -10,7 +11,7 @@ import se.cygni.snake.client.MapCoordinate;
 
 public abstract class Behavior {
 
-  public static HashMap<SnakeDirection, Double> values = new HashMap<>();
+  public static WeakHashMap<SnakeDirection, Double> values = new WeakHashMap<>();
   public static ArrayList<Behavior> behaviors = new ArrayList<>();
 
   static {
@@ -20,7 +21,7 @@ public abstract class Behavior {
     values.put(SnakeDirection.RIGHT, 0D);
   }
 
-  public static SnakeDirection getBestMove(List<SnakeDirection> directions) {
+  public static final SnakeDirection getBestMove(final List<SnakeDirection> directions) {
     resetValues();
     callBehaviors(directions);
 
@@ -37,18 +38,18 @@ public abstract class Behavior {
     return bestDirection;
   }
 
-  private static void callBehaviors(List<SnakeDirection> directions) {
-    boolean relevant = false;
+  private static final void callBehaviors(final List<SnakeDirection> directions) {
+    boolean relevant = true;
 
-    for (Behavior b : behaviors) {
-      HashMap<SnakeDirection, Double> behaviorValues = b.getValues(directions);
+    for (final Behavior b : behaviors) {
+      final HashMap<SnakeDirection, Double> behaviorValues = b.getValues(directions);
 
       if (relevant) {
         System.out.println();
         System.out.println(b.getClass().getName());
       }
 
-      for (SnakeDirection direction : behaviorValues.keySet()) {
+      for (final SnakeDirection direction : behaviorValues.keySet()) {
         if (relevant) System.out.println(direction + " " + behaviorValues.get(direction));
         values.put(direction, values.get(direction) + behaviorValues.get(direction));
       }
@@ -63,8 +64,8 @@ public abstract class Behavior {
     }
   }
 
-  private static void resetValues() {
-    for (SnakeDirection direction : values.keySet()) {
+  private static final void resetValues() {
+    for (final SnakeDirection direction : values.keySet()) {
       values.put(direction, 0D);
     }
   }

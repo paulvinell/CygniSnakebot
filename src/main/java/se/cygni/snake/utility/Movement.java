@@ -33,6 +33,7 @@ public class Movement {
 
     final int position = tick.coordinates.translateCoordinate(coordinate);
 
+    snakeCheck:
     for (final SnakeInfo snake : tick.mapUpdateEvent.getMap().getSnakeInfos()) {
       if (!snake.isAlive()) {
         continue;
@@ -48,11 +49,12 @@ public class Movement {
               return true;
             }
           } else if (positions.length > 1
-              && i == positions.length - 1
               && snake.getTailProtectedForGameTicks() == 0
               && !snake.getId().equals(tick.mapUpdateEvent.getReceivingPlayerId())) {
             return true;
           }
+
+          break snakeCheck;
         }
       }
     }

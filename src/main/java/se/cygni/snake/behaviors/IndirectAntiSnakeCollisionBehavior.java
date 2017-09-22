@@ -20,8 +20,8 @@ public class IndirectAntiSnakeCollisionBehavior extends Behavior {
     final SnakeDirection currentDirection = tick.relativeDirection.getCurrentSnakeDirection();
 
     if (directions.contains(currentDirection)) {
-      boolean left = isSnakeApproachingThroughPseudoCorridor(Direction.LEFT, 2);
-      boolean right = isSnakeApproachingThroughPseudoCorridor(Direction.RIGHT, 2);
+      final boolean left = isSnakeApproachingThroughPseudoCorridor(Direction.LEFT, 2);
+      final boolean right = isSnakeApproachingThroughPseudoCorridor(Direction.RIGHT, 2);
 
       if (left || right) {
         values.put(currentDirection, -0.5D);
@@ -42,7 +42,9 @@ public class IndirectAntiSnakeCollisionBehavior extends Behavior {
       if ((i > 0 && !tick.movement.isTileAvailableForMovementTo(curP))
           || tick.movement.isTileAvailableForMovementTo(block)) {
         return false;
-      } else if (i == forwardAmount - 1) {
+      }
+
+      if (i == forwardAmount - 1) {
         MapCoordinate enemy = tick.relativeDirection.getCoordinateRelativeDirection(curP, enemyDirection);
 
         if (tick.movement.isEnemyHeadAt(enemy)) {

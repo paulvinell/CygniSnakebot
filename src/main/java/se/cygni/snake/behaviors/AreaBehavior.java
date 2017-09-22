@@ -27,16 +27,16 @@ public class AreaBehavior extends Behavior {
 
     final HashSet<Double> unprocessedValuesUnsorted = new HashSet<>();
 
-    for (SnakeDirection direction : directions) {
-      MapCoordinate posAfterMove = tick.movement.getNewCoordinate(direction, tick.mapUtil.getMyPosition());
+    for (final SnakeDirection direction : directions) {
+      final MapCoordinate posAfterMove = tick.movement.getNewCoordinate(direction, tick.mapUtil.getMyPosition());
 
-      double areaAtPos = tick.area.getAreaFrom(posAfterMove).size();
+      final double areaAtPos = tick.area.getAreaFrom(posAfterMove).size();
 
       unprocessedMap.put(direction, areaAtPos);
       unprocessedValuesUnsorted.add(areaAtPos);
     }
 
-    final ArrayList<Double> unprocessedValuesSorted = new ArrayList<>();
+    final List<Double> unprocessedValuesSorted = new ArrayList<>();
     unprocessedValuesSorted.addAll(unprocessedValuesUnsorted);
     Collections.sort(unprocessedValuesSorted); //ascending
     Collections.reverse(unprocessedValuesSorted); //now descending

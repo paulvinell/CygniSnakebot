@@ -13,12 +13,12 @@ public class DirectAntiSnakeCollisionBehavior extends Behavior {
   }
 
   @Override
-  public HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions) {
-    HashMap<SnakeDirection, Double> values = new HashMap<>();
+  public final HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions) {
+    final HashMap<SnakeDirection, Double> values = new HashMap<>();
 
     for (SnakeDirection direction : directions) {
-      boolean headOnCollision = canCollideWithEnemyHeadInDirection(direction, 2);
-      boolean sideCollision = canCollideWithCloseEnemyHead(direction);
+      final boolean headOnCollision = canCollideWithEnemyHeadInDirection(direction, 2);
+      final boolean sideCollision = canCollideWithCloseEnemyHead(direction);
 
       if (headOnCollision && sideCollision) {
         values.put(direction, -1D);
@@ -32,7 +32,7 @@ public class DirectAntiSnakeCollisionBehavior extends Behavior {
     return values;
   }
 
-  public boolean canCollideWithCloseEnemyHead(SnakeDirection direction) {
+  public final boolean canCollideWithCloseEnemyHead(final SnakeDirection direction) {
     MapCoordinate curC = tick.movement.getNewCoordinate(direction, tick.mapUtil.getMyPosition());
 
     MapCoordinate sideOne;
@@ -49,7 +49,7 @@ public class DirectAntiSnakeCollisionBehavior extends Behavior {
     return tick.movement.isEnemyHeadAt(sideOne) || tick.movement.isEnemyHeadAt(sideTwo);
   }
 
-  public boolean canCollideWithEnemyHeadInDirection(SnakeDirection direction, int steps) {
+  public final boolean canCollideWithEnemyHeadInDirection(final SnakeDirection direction, final int steps) {
     MapCoordinate curPos = tick.mapUtil.getMyPosition();
 
     for (int i = 0; i < steps; i++) {

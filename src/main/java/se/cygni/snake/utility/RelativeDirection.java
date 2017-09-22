@@ -51,7 +51,7 @@ public class RelativeDirection {
    * @param dy The change in y. Negative values go back, positive forward.
    * @return
    */
-  public final MapCoordinate translateRelativeDirection(MapCoordinate position, int dx, int dy) {
+  public final MapCoordinate translateRelativeDirection(final MapCoordinate position, final int dx, final int dy) {
     final SnakeDirection direction = getCurrentSnakeDirection();
 
     switch (direction) {
@@ -68,7 +68,7 @@ public class RelativeDirection {
     return null;
   }
 
-  public final Direction getRelativeDirection(SnakeDirection direction) {
+  public final Direction getRelativeDirection(final SnakeDirection direction) {
     final SnakeDirection curD = getCurrentSnakeDirection();
 
     int trueDirection = 0;
@@ -94,8 +94,8 @@ public class RelativeDirection {
         .getSnakeSpread(tick.mapUpdateEvent.getReceivingPlayerId());
 
     if (coordinates.length > 1) {
-      int dX = coordinates[0].x - coordinates[1].x;
-      int dY = coordinates[0].y - coordinates[1].y;
+      final int dX = coordinates[0].x - coordinates[1].x;
+      final int dY = coordinates[0].y - coordinates[1].y;
 
       if (dX == 1) {
         return SnakeDirection.RIGHT;

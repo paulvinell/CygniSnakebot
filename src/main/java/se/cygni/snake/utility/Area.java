@@ -2,6 +2,7 @@ package se.cygni.snake.utility;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import se.cygni.snake.Tick;
 import se.cygni.snake.api.event.MapUpdateEvent;
 import se.cygni.snake.client.MapCoordinate;
@@ -19,17 +20,24 @@ public class Area {
 
   public final HashSet<Integer> getAreaFrom(final MapCoordinate c) {
     final HashSet<Integer> traversable = new HashSet<>();
+    final HashSet<Integer> current = new HashSet<>();
 
-    traversable.add(tick.coordinates.translateCoordinate(c));
+    final Integer startPosition = tick.coordinates.translateCoordinate(c);
+
+    traversable.add(startPosition);
+    current.add(startPosition);
 
     int lastSize = -1;
     while (lastSize != traversable.size()) {
       lastSize = traversable.size();
 
-      for (final Integer curC : (HashSet<Integer>) traversable.clone()) {
+      final HashSet<Integer> iterator = (HashSet<Integer>) current.clone();
+      current.clear();
+
+      for (final Integer curC : iterator) {
         final MapCoordinate mapC = tick.mapUtil.translatePosition(curC);
 
-        final ArrayList<MapCoordinate> moves = new ArrayList<>();
+        final List<MapCoordinate> moves = new ArrayList<>();
 
         moves.add(mapC.translateBy(-1, 0));
         moves.add(mapC.translateBy(1, 0));
@@ -38,14 +46,47 @@ public class Area {
 
         for (final MapCoordinate move : moves) {
           if (tick.movement.isTileAvailableForMovementTo(move)) {
-            traversable.add(
-                tick.coordinates.translateCoordinate(move));
+            final Integer currentPosition = tick.coordinates.translateCoordinate(move);
+
+            traversable.add(currentPosition);
+            current.add(currentPosition);
           }
         }
       }
     }
+
     return traversable;
   }
+
+//  public final HashSet<Integer> getAreaFrom(final MapCoordinate c) {
+//    final HashSet<Integer> traversable = new HashSet<>();
+//
+//    traversable.add(tick.coordinates.translateCoordinate(c));
+//
+//    int lastSize = -1;
+//    while (lastSize != traversable.size()) {
+//      lastSize = traversable.size();
+//
+//      for (final Integer curC : (HashSet<Integer>) traversable.clone()) {
+//        final MapCoordinate mapC = tick.mapUtil.translatePosition(curC);
+//
+//        final ArrayList<MapCoordinate> moves = new ArrayList<>();
+//
+//        moves.add(mapC.translateBy(-1, 0));
+//        moves.add(mapC.translateBy(1, 0));
+//        moves.add(mapC.translateBy(0, -1));
+//        moves.add(mapC.translateBy(0, 1));
+//
+//        for (final MapCoordinate move : moves) {
+//          if (tick.movement.isTileAvailableForMovementTo(move)) {
+//            traversable.add(
+//                tick.coordinates.translateCoordinate(move));
+//          }
+//        }
+//      }
+//    }
+//    return traversable;
+//  }
 
   public final boolean isArtificialObstacle(final MapCoordinate coordinate) {
     for (final MapCoordinate curC : artificialObstacles) {
