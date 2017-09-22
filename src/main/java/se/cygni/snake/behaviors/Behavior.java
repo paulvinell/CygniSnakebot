@@ -70,7 +70,7 @@ public abstract class Behavior {
   }
 
 
-  protected Tick tick;
+  protected final Tick tick;
 
   public Behavior(Tick tick) {
     this.tick = tick;

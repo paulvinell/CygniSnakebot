@@ -14,10 +14,10 @@ public class SnakeAmountBehavior extends Behavior {
   }
 
   @Override
-  public HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions) {
-    HashMap<SnakeDirection, Double> values = new HashMap<>();
+  public final HashMap<SnakeDirection, Double> getValues(final List<SnakeDirection> directions) {
+    final HashMap<SnakeDirection, Double> values = new HashMap<>();
 
-    MapCoordinate curC = tick.mapUtil.getMyPosition();
+    final MapCoordinate curC = tick.mapUtil.getMyPosition();
 
     int snakesLeft = 0;
     int snakesRight = 0;
@@ -45,13 +45,13 @@ public class SnakeAmountBehavior extends Behavior {
       }
     }
 
-    if (snakesLeft > snakesRight) {
+    if (snakesLeft < snakesRight) {
       values.put(SnakeDirection.RIGHT, 0.25D);
     } else {
       values.put(SnakeDirection.LEFT, 0.25D);
     }
 
-    if (snakesDown > snakesUp) {
+    if (snakesDown < snakesUp) {
       values.put(SnakeDirection.UP, 0.25D);
     } else {
       values.put(SnakeDirection.DOWN, 0.25D);

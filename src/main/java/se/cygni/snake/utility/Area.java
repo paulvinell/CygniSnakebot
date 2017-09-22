@@ -37,7 +37,7 @@ public class Area {
         moves.add(mapC.translateBy(0, 1));
 
         for (final MapCoordinate move : moves) {
-          if (tick.mapUtil.isTileAvailableForMovementTo(move)) {
+          if (tick.movement.isTileAvailableForMovementTo(move)) {
             traversable.add(
                 tick.coordinates.translateCoordinate(move));
           }
@@ -47,8 +47,8 @@ public class Area {
     return traversable;
   }
 
-  public boolean isArtificialObstacle(MapCoordinate coordinate) {
-    for (MapCoordinate curC : artificialObstacles) {
+  public final boolean isArtificialObstacle(final MapCoordinate coordinate) {
+    for (final MapCoordinate curC : artificialObstacles) {
       if (curC.x == coordinate.x && curC.y == coordinate.y) {
         return true;
       }

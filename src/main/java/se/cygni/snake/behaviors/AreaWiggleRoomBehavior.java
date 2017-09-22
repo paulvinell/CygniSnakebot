@@ -16,12 +16,12 @@ public class AreaWiggleRoomBehavior extends Behavior {
   }
 
   @Override
-  public HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions) {
-    HashMap<SnakeDirection, Double> values = new HashMap<>();
+  public final HashMap<SnakeDirection, Double> getValues(final List<SnakeDirection> directions) {
+    final HashMap<SnakeDirection, Double> values = new HashMap<>();
 
-    MapCoordinate curC = tick.mapUtil.getMyPosition();
+    final MapCoordinate curC = tick.mapUtil.getMyPosition();
 
-    HashSet<Double> unprocessedValuesUnsorted = new HashSet<>();
+    final HashSet<Double> unprocessedValuesUnsorted = new HashSet<>();
 
     if (directions.contains(SnakeDirection.LEFT) && directions.contains(SnakeDirection.RIGHT)
         && (curC.y == 1 || curC.y == tick.mapUpdateEvent.getMap().getHeight() - 2)) {
@@ -31,8 +31,8 @@ public class AreaWiggleRoomBehavior extends Behavior {
         tick.area.artificialObstacles.add(curC.translateBy(0, 1));
       }
 
-      double areaLeft = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.LEFT, curC)).size();
-      double areaRight = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.RIGHT, curC)).size();
+      final double areaLeft = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.LEFT, curC)).size();
+      final double areaRight = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.RIGHT, curC)).size();
 
       values.put(SnakeDirection.LEFT, areaLeft);
       values.put(SnakeDirection.RIGHT, areaRight);
@@ -47,8 +47,8 @@ public class AreaWiggleRoomBehavior extends Behavior {
         tick.area.artificialObstacles.add(curC.translateBy(1, 0));
       }
 
-      double areaUp = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.UP, curC)).size();
-      double areaDown = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.DOWN, curC)).size();
+      final double areaUp = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.UP, curC)).size();
+      final double areaDown = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.DOWN, curC)).size();
 
       values.put(SnakeDirection.UP, areaUp);
       values.put(SnakeDirection.DOWN, areaDown);
@@ -58,7 +58,7 @@ public class AreaWiggleRoomBehavior extends Behavior {
       return values;
     }
 
-    ArrayList<Double> unprocessedValuesSorted = new ArrayList<>();
+    final ArrayList<Double> unprocessedValuesSorted = new ArrayList<>();
     unprocessedValuesSorted.addAll(unprocessedValuesUnsorted);
     Collections.sort(unprocessedValuesSorted); //ascending
 

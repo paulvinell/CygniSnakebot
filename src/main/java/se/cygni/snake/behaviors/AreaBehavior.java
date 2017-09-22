@@ -17,15 +17,15 @@ public class AreaBehavior extends Behavior {
   }
 
   @Override
-  public HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions) {
-    HashMap<SnakeDirection, Double> values = new HashMap<>();
-    HashMap<SnakeDirection, Double> unprocessedMap = new HashMap<>();
+  public final HashMap<SnakeDirection, Double> getValues(final List<SnakeDirection> directions) {
+    final HashMap<SnakeDirection, Double> values = new HashMap<>();
+    final HashMap<SnakeDirection, Double> unprocessedMap = new HashMap<>();
 
     if (!tick.movement.hasEncounteredSeparatingObstacles()) {
       return unprocessedMap;
     }
 
-    HashSet<Double> unprocessedValuesUnsorted = new HashSet<>();
+    final HashSet<Double> unprocessedValuesUnsorted = new HashSet<>();
 
     for (SnakeDirection direction : directions) {
       MapCoordinate posAfterMove = tick.movement.getNewCoordinate(direction, tick.mapUtil.getMyPosition());
@@ -36,7 +36,7 @@ public class AreaBehavior extends Behavior {
       unprocessedValuesUnsorted.add(areaAtPos);
     }
 
-    ArrayList<Double> unprocessedValuesSorted = new ArrayList<>();
+    final ArrayList<Double> unprocessedValuesSorted = new ArrayList<>();
     unprocessedValuesSorted.addAll(unprocessedValuesUnsorted);
     Collections.sort(unprocessedValuesSorted); //ascending
     Collections.reverse(unprocessedValuesSorted); //now descending
@@ -45,16 +45,16 @@ public class AreaBehavior extends Behavior {
     double decrement = 2;
 
     if (unprocessedValuesSorted.size() == 2) {
-      double min = Math.min(unprocessedValuesSorted.get(0), unprocessedValuesSorted.get(1));
-      double max = Math.max(unprocessedValuesSorted.get(0), unprocessedValuesSorted.get(1));
+      final double min = Math.min(unprocessedValuesSorted.get(0), unprocessedValuesSorted.get(1));
+      final double max = Math.max(unprocessedValuesSorted.get(0), unprocessedValuesSorted.get(1));
 
       if (min / max <= 0.1) {
         decrement = 3;
       }
     }
 
-    for (double area : unprocessedValuesSorted) {
-      for (SnakeDirection direction : unprocessedMap.keySet()) {
+    for (final double area : unprocessedValuesSorted) {
+      for (final SnakeDirection direction : unprocessedMap.keySet()) {
         if (unprocessedMap.get(direction) == area) {
           values.put(direction, value);
         }

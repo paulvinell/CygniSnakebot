@@ -5,7 +5,7 @@ import se.cygni.snake.client.MapCoordinate;
 
 public class Coordinates {
 
-  private Tick tick;
+  private final Tick tick;
 
   public Coordinates(Tick tick) {
     this.tick = tick;

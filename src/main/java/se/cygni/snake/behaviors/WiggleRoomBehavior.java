@@ -13,11 +13,11 @@ public class WiggleRoomBehavior extends Behavior {
   }
 
   @Override
-  public HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions) {
-    HashMap<SnakeDirection, Double> values = new HashMap<>();
+  public final HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions) {
+    final HashMap<SnakeDirection, Double> values = new HashMap<>();
 
-    for (SnakeDirection direction : directions) {
-      MapCoordinate resultingPos = tick.movement.getNewCoordinate(direction, tick.mapUtil.getMyPosition());
+    for (final SnakeDirection direction : directions) {
+      final MapCoordinate resultingPos = tick.movement.getNewCoordinate(direction, tick.mapUtil.getMyPosition());
 
       if (resultingPos.x > 0 && resultingPos.x < tick.mapUpdateEvent.getMap().getWidth() - 1
           && resultingPos.y > 0 && resultingPos.y < tick.mapUpdateEvent.getMap().getHeight() - 1) {

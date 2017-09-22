@@ -163,11 +163,11 @@ public class SimpleSnakePlayer extends BaseSnakeClient {
 
     @Override
     public void onConnected() {
-      this.tick = new Tick(this);
-
         LOGGER.info("Connected, registering for training...");
         GameSettings gameSettings = GameSettingsUtils.trainingWorld();
         registerForGame(gameSettings);
+
+        this.tick = new Tick(this, gameSettings);
     }
 
     @Override

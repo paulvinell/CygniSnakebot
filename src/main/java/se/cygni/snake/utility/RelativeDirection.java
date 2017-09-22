@@ -11,10 +11,10 @@ public class RelativeDirection {
     FORWARD, RIGHT, BACK, LEFT
   }
 
-  private SnakeDirection[] trueDirections = new SnakeDirection[4];
-  private Direction[] relativeDirections = new Direction[4];
+  private final SnakeDirection[] trueDirections = new SnakeDirection[4];
+  private final Direction[] relativeDirections = new Direction[4];
 
-  private Tick tick;
+  private final Tick tick;
 
   public RelativeDirection(Tick tick) {
     this.tick = tick;
@@ -30,31 +30,46 @@ public class RelativeDirection {
     relativeDirections[3] = Direction.LEFT;
   }
 
+  public final MapCoordinate getCoordinateRelativeDirection(final MapCoordinate position, final Direction direction) {
+    switch (direction) {
+      case FORWARD:
+        return translateRelativeDirection(position, 0, 1);
+      case RIGHT:
+        return translateRelativeDirection(position, 1, 0);
+      case BACK:
+        return translateRelativeDirection(position, 0, -1);
+      case LEFT:
+        return translateRelativeDirection(position, -1, 0);
+    }
+
+    return null;
+  }
+
   /**
    * @param position Current position on map.
    * @param dx The change in x. Negative values go left, positive right.
    * @param dy The change in y. Negative values go back, positive forward.
    * @return
    */
-  public MapCoordinate translateRelativeDirection(MapCoordinate position, int dx, int dy) {
-    Direction direction = getRelativeDirection(getCurrentSnakeDirection());
+  public final MapCoordinate translateRelativeDirection(MapCoordinate position, int dx, int dy) {
+    final SnakeDirection direction = getCurrentSnakeDirection();
 
     switch (direction) {
-      case FORWARD:
-        break;
+      case UP:
+        return position.translateBy(dx, -dy);
       case RIGHT:
-        break;
-      case BACK:
-        break;
+        return position.translateBy(dy, dx);
+      case DOWN:
+        return position.translateBy(-dx, dy);
       case LEFT:
-        break;
+        return position.translateBy(-dy, -dx);
     }
 
     return null;
   }
 
-  public Direction getRelativeDirection(SnakeDirection direction) {
-    SnakeDirection curD = getCurrentSnakeDirection();
+  public final Direction getRelativeDirection(SnakeDirection direction) {
+    final SnakeDirection curD = getCurrentSnakeDirection();
 
     int trueDirection = 0;
     for (SnakeDirection snakeDirection : trueDirections) {
@@ -74,8 +89,8 @@ public class RelativeDirection {
     return Direction.BACK;
   }
 
-  public SnakeDirection getCurrentSnakeDirection() {
-    MapCoordinate[] coordinates = tick.mapUtil
+  public final SnakeDirection getCurrentSnakeDirection() {
+    final MapCoordinate[] coordinates = tick.mapUtil
         .getSnakeSpread(tick.mapUpdateEvent.getReceivingPlayerId());
 
     if (coordinates.length > 1) {
@@ -94,5 +109,20 @@ public class RelativeDirection {
     }
 
     return SnakeDirection.DOWN;
+  }
+
+  public final Direction getOppositeRelativeDirection(final Direction direction) {
+    switch (direction) {
+      case FORWARD:
+        return Direction.BACK;
+      case RIGHT:
+        return Direction.LEFT;
+      case BACK:
+        return Direction.FORWARD;
+      case LEFT:
+        return Direction.RIGHT;
+    }
+
+    return null;
   }
 }

@@ -3,6 +3,7 @@ package se.cygni.snake;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import se.cygni.snake.api.model.GameSettings;
 import se.cygni.snake.api.model.SnakeInfo;
 import se.cygni.snake.behaviors.AvoidCorridorBehavior;
 import se.cygni.snake.behaviors.DirectAntiSnakeCollisionBehavior;
@@ -35,7 +36,11 @@ public class Tick {
    * Definitely add corridor avoidance
    * Penalize closed corridors even more
    *
-   * Remember that you can step on enemy snake tails
+   * dont just calculate areas, calculate rooms too
+   *
+   * http://game.snake.cygni.se/#/viewgame/4a7d5514-5130-4f81-b8d8-e5720193945f?_k=6ubepl
+   *
+   * http://game.snake.cygni.se/#/viewgame/d2ef0803-b334-42d4-87b7-f8f161ee81fe?_k=0ugxcn
    *
    * http://game.snake.cygni.se/#/viewgame/dbb3f8b0-3528-439e-b5fb-334618b16f08?_k=rm2vk5
    * fix defense against attack involving wiggle room exploit
@@ -52,25 +57,31 @@ public class Tick {
    * Only difference is that a wall is besides the snake:
    * http://game.snake.cygni.se/#/viewgame/c2846515-9d2a-4102-8d61-a5fc8566e639?_k=dgfcnk
    * avoid this death by adding an artificial tile between snakes and walk toward biggest area
-   * http://game.snake.cygni.se/#/viewgame/d1114dca-97fd-46a8-8163-dcd5ae38b093?_k=t1y2qe
-   * easily avoidable confusion, just turn earlier
    *
    * http://game.snake.cygni.se/#/viewgame/fd3ee8e4-71e6-4e55-8021-0d9c3ff52f07?_k=fndou8
+   *
+   * to make calculations better. Check if the obstacle is a snake. Check the manhattan distance.
+   * Remove the amount of tiles equals to the manhattan distance to the tile from the enemy snakes length.
+   * If there is no obstacle by the time we get there, there is no obstacle
+   *
+   * http://game.snake.cygni.se/#/viewgame/a7ee7e8e-7d20-409f-8a17-f94f80ae34cf?_k=9wprre
+   * check if area calculation is relevant one step forward
    */
 
-  private SimpleSnakePlayer ssp;
+  public final SimpleSnakePlayer ssp;
+  public final GameSettings gameSettings;
 
-  public Area area;
-  public Movement movement;
-  public Coordinates coordinates;
-  public RelativeDirection relativeDirection;
+  public final Area area;
+  public final Movement movement;
+  public final Coordinates coordinates;
+  public final RelativeDirection relativeDirection;
 
   public MapUpdateEvent mapUpdateEvent;
   public MapUtil mapUtil;
-  public HashMap<SnakeDirection, Integer> directions = new HashMap<>(); //direction and associated area
 
-  public Tick(SimpleSnakePlayer ssp) {
+  public Tick(SimpleSnakePlayer ssp, GameSettings gameSettings) {
     this.ssp = ssp;
+    this.gameSettings = gameSettings;
 
     this.area = new Area(this);
     this.movement = new Movement(this);
@@ -82,20 +93,22 @@ public class Tick {
     new AvoidHeadTrapBehavior(this);
     new DirectAntiSnakeCollisionBehavior(this);
     new SnakeAmountBehavior(this);
+    new IndirectAntiSnakeCollisionBehavior(this);
     new WiggleRoomBehavior(this);
 
 //    new AvoidCorridorBehavior(this);
-//    new IndirectAntiSnakeCollisionBehavior(this);
   }
 
-  public void onMapUpdate(MapUpdateEvent mapUpdateEvent) {
+  public void onMapUpdate(final MapUpdateEvent mapUpdateEvent) {
+    long nano = System.nanoTime();
+
     this.mapUpdateEvent = mapUpdateEvent;
     this.mapUtil = new MapUtil(mapUpdateEvent.getMap(), ssp.getPlayerId());
 
-    List<SnakeDirection> directions = new ArrayList<>();
+    final List<SnakeDirection> directions = new ArrayList<>();
 
-    for (SnakeDirection direction : SnakeDirection.values()) {
-      if (mapUtil.canIMoveInDirection(direction)) {
+    for (final SnakeDirection direction : SnakeDirection.values()) {
+      if (movement.canIMoveInDirection(direction)) {
         directions.add(direction);
       }
     }
@@ -111,5 +124,7 @@ public class Tick {
     }
 
     ssp.registerMove(mapUpdateEvent.getGameTick(), direction);
+
+    System.out.println((System.nanoTime() - nano) / Math.pow(10, 9));
   }
 }
