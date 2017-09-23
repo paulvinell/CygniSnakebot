@@ -9,10 +9,13 @@ import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.client.MapCoordinate;
 
-public abstract class Behavior {
+public abstract class Behavior implements Runnable {
 
   public static WeakHashMap<SnakeDirection, Double> values = new WeakHashMap<>();
   public static ArrayList<Behavior> behaviors = new ArrayList<>();
+
+  protected static List<SnakeDirection> directions;
+  protected static long currentTick;
 
   static {
     values.put(SnakeDirection.UP, 0D);
@@ -22,45 +25,48 @@ public abstract class Behavior {
   }
 
   public static final SnakeDirection getBestMove(final List<SnakeDirection> directions) {
+    long nano = System.nanoTime();
+
+    Behavior.directions = directions;
+    currentTick = Tick.tick.mapUpdateEvent.getGameTick();
+
     resetValues();
-    callBehaviors(directions);
+    callBehaviors();
+
+    while (areBehaviorsRunning() && (System.nanoTime() - nano < 2400000000L)) {
+      try {
+        Thread.sleep(1);
+      } catch (InterruptedException e) {}
+    }
 
     double bestScore = Double.MIN_VALUE;
     SnakeDirection bestDirection = SnakeDirection.DOWN;
 
-    for (SnakeDirection direction : values.keySet()) {
-      if (directions.contains(direction) && values.get(direction) > bestScore) {
-        bestScore = values.get(direction);
-        bestDirection = direction;
+    synchronized (values) {
+      for (SnakeDirection direction : values.keySet()) {
+        if (directions.contains(direction) && values.get(direction) > bestScore) {
+          bestScore = values.get(direction);
+          bestDirection = direction;
+        }
       }
     }
 
     return bestDirection;
   }
 
-  private static final void callBehaviors(final List<SnakeDirection> directions) {
-    boolean relevant = true;
-
-    for (final Behavior b : behaviors) {
-      final HashMap<SnakeDirection, Double> behaviorValues = b.getValues(directions);
-
-      if (relevant) {
-        System.out.println();
-        System.out.println(b.getClass().getName());
-      }
-
-      for (final SnakeDirection direction : behaviorValues.keySet()) {
-        if (relevant) System.out.println(direction + " " + behaviorValues.get(direction));
-        values.put(direction, values.get(direction) + behaviorValues.get(direction));
+  public static final boolean areBehaviorsRunning() {
+    for (Behavior b : behaviors) {
+      if (b.lastGameTick != Tick.tick.mapUpdateEvent.getGameTick()) {
+        return true;
       }
     }
 
-    if (relevant) {
-      System.out.println();
-      for (SnakeDirection direction : values.keySet()) {
-        System.out.println(direction + " " + values.get(direction));
-      }
-      System.out.println();
+    return false;
+  }
+
+  private static final void callBehaviors() {
+    for (final Behavior b : behaviors) {
+      new Thread(b).start();
     }
   }
 
@@ -72,11 +78,27 @@ public abstract class Behavior {
 
 
   protected final Tick tick;
+  public long lastGameTick;
 
   public Behavior(Tick tick) {
     this.tick = tick;
 
     behaviors.add(this);
+  }
+
+  public void run() {
+    final long workingTick = tick.mapUpdateEvent.getGameTick();
+    final HashMap<SnakeDirection, Double> behaviorValues = this.getValues(directions);
+
+    if (currentTick == workingTick) {
+      synchronized (values) {
+        for (final SnakeDirection direction : behaviorValues.keySet()) {
+          values.put(direction, values.get(direction) + behaviorValues.get(direction));
+        }
+      }
+
+      lastGameTick = workingTick;
+    }
   }
 
   public abstract HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions);

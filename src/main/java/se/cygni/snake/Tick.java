@@ -62,13 +62,11 @@ public class Tick {
    *
    * http://game.snake.cygni.se/#/viewgame/fd3ee8e4-71e6-4e55-8021-0d9c3ff52f07?_k=fndou8
    *
-   * to make calculations better. Check if the obstacle is a snake. Check the manhattan distance.
-   * Remove the amount of tiles equals to the manhattan distance to the tile from the enemy snakes length.
-   * If there is no obstacle by the time we get there, there is no obstacle
-   *
    * http://game.snake.cygni.se/#/viewgame/a7ee7e8e-7d20-409f-8a17-f94f80ae34cf?_k=9wprre
    * check if area calculation is relevant one step forward
    */
+
+  public static Tick tick;
 
   public final SimpleSnakePlayer ssp;
   public final GameSettings gameSettings;
@@ -82,6 +80,8 @@ public class Tick {
   public MapUtil mapUtil;
 
   public Tick(SimpleSnakePlayer ssp, GameSettings gameSettings) {
+    Tick.tick = this;
+
     this.ssp = ssp;
     this.gameSettings = gameSettings;
 
