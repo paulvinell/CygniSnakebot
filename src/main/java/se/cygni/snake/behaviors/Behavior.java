@@ -33,7 +33,7 @@ public abstract class Behavior implements Runnable {
     resetValues();
     callBehaviors();
 
-    while (areBehaviorsRunning() && (System.nanoTime() - nano < 2400000000L)) {
+    while (areBehaviorsRunning() && (System.nanoTime() - nano < 2100000000L)) {
       try {
         Thread.sleep(1);
       } catch (InterruptedException e) {}

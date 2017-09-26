@@ -4,21 +4,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import se.cygni.snake.Tick;
-import se.cygni.snake.api.event.MapUpdateEvent;
+import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.client.MapCoordinate;
-import se.cygni.snake.client.MapUtil;
 
-public class Area {
+public class Room {
 
   private final Tick tick;
 
   public final ArrayList<MapCoordinate> artificialObstacles = new ArrayList<>();
 
-  public Area(Tick tick) {
+  public Room(Tick tick) {
     this.tick = tick;
   }
 
-  public final HashSet<Integer> getAreaFrom(final MapCoordinate c) {
+  public final HashSet<Integer> getRoomFrom(final MapCoordinate c) {
     final HashSet<Integer> traversable = new HashSet<>();
     final HashSet<Integer> current = new HashSet<>();
 
@@ -37,16 +36,28 @@ public class Area {
       for (final Integer curC : iterator) {
         final MapCoordinate mapC = tick.mapUtil.translatePosition(curC);
 
-        final List<MapCoordinate> moves = new ArrayList<>();
+        final ArrayList<SnakeDirection> moves = new ArrayList<>();
 
-        moves.add(mapC.translateBy(-1, 0));
-        moves.add(mapC.translateBy(1, 0));
-        moves.add(mapC.translateBy(0, -1));
-        moves.add(mapC.translateBy(0, 1));
+        moves.add(SnakeDirection.UP);
+        moves.add(SnakeDirection.DOWN);
+        moves.add(SnakeDirection.LEFT);
+        moves.add(SnakeDirection.RIGHT);
 
-        for (final MapCoordinate move : moves) {
-          if (tick.movement.isTileAvailableForMovementTo(move)) {
-            final Integer currentPosition = tick.coordinates.translateCoordinate(move);
+        for (final SnakeDirection move : (List<SnakeDirection>) moves.clone()) {
+          if (!tick.movement.isTileAvailableForMovementTo(
+              tick.movement.getNewCoordinate(move, mapC))) {
+            moves.remove(move);
+          }
+        }
+
+        boolean containsVertical = moves.contains(SnakeDirection.UP) || moves.contains(SnakeDirection.DOWN);
+        boolean containsHorizontal = moves.contains(SnakeDirection.LEFT) || moves.contains(SnakeDirection.RIGHT);
+
+        if (containsVertical && containsHorizontal) {
+          for (final SnakeDirection move : moves) {
+            final Integer currentPosition
+                = tick.coordinates.translateCoordinate(
+                    tick.movement.getNewCoordinate(move, mapC));
 
             traversable.add(currentPosition);
             current.add(currentPosition);

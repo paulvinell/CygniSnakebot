@@ -20,8 +20,10 @@ public class IndirectAntiSnakeCollisionBehavior extends Behavior {
     final SnakeDirection currentDirection = tick.relativeDirection.getCurrentSnakeDirection();
 
     if (directions.contains(currentDirection)) {
-      final boolean left = isSnakeApproachingThroughPseudoCorridor(Direction.LEFT, 2);
-      final boolean right = isSnakeApproachingThroughPseudoCorridor(Direction.RIGHT, 2);
+      final boolean left = isSnakeApproachingThroughPseudoCorridor(Direction.LEFT, 2)
+          || isSnakeApproachingThroughPseudoCorridor(Direction.LEFT, 3);
+      final boolean right = isSnakeApproachingThroughPseudoCorridor(Direction.RIGHT, 2)
+          || isSnakeApproachingThroughPseudoCorridor(Direction.RIGHT, 3);
 
       if (left || right) {
         values.put(currentDirection, -0.5D);
@@ -34,22 +36,18 @@ public class IndirectAntiSnakeCollisionBehavior extends Behavior {
   public final boolean isSnakeApproachingThroughPseudoCorridor(final Direction enemyDirection, final int forwardAmount) {
     MapCoordinate curP = tick.mapUtil.getMyPosition();
 
-    final Direction blockDirection = tick.relativeDirection.getOppositeRelativeDirection(enemyDirection);
-
     for (int i = 0; i < forwardAmount; i++) {
-      MapCoordinate block = tick.relativeDirection.getCoordinateRelativeDirection(curP, blockDirection);
+      MapCoordinate enemySide = tick.relativeDirection.getCoordinateRelativeDirection(curP, enemyDirection);
 
-      if ((i > 0 && !tick.movement.isTileAvailableForMovementTo(curP))
-          || tick.movement.isTileAvailableForMovementTo(block)) {
+      if (i != forwardAmount -1
+          && i > 0
+          && (!tick.movement.isTileAvailableForMovementTo(curP)
+          || !tick.movement.isTileAvailableForMovementTo(enemySide))) {
         return false;
       }
 
-      if (i == forwardAmount - 1) {
-        MapCoordinate enemy = tick.relativeDirection.getCoordinateRelativeDirection(curP, enemyDirection);
-
-        if (tick.movement.isEnemyHeadAt(enemy)) {
-          return true;
-        }
+      if (i == forwardAmount - 1 && tick.movement.isEnemyHeadAt(enemySide)) {
+        return true;
       }
 
       curP = tick.relativeDirection.getCoordinateRelativeDirection(curP, Direction.FORWARD);

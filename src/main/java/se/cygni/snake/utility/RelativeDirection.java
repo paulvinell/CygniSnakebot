@@ -89,6 +89,16 @@ public class RelativeDirection {
     return Direction.BACK;
   }
 
+  public final SnakeDirection getSnakeDirection(final Direction direction) {
+    for (SnakeDirection snakeDirection : trueDirections) {
+      if (getRelativeDirection(snakeDirection) == direction) {
+        return snakeDirection;
+      }
+    }
+
+    return null;
+  }
+
   public final SnakeDirection getCurrentSnakeDirection() {
     final MapCoordinate[] coordinates = tick.mapUtil
         .getSnakeSpread(tick.mapUpdateEvent.getReceivingPlayerId());

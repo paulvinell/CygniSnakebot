@@ -8,6 +8,7 @@ import java.util.List;
 import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.client.MapCoordinate;
+import se.cygni.snake.utility.Area;
 
 public class AreaWiggleRoomBehavior extends Behavior {
 
@@ -17,6 +18,7 @@ public class AreaWiggleRoomBehavior extends Behavior {
 
   @Override
   public final HashMap<SnakeDirection, Double> getValues(final List<SnakeDirection> directions) {
+    final Area area = new Area(tick);
     final HashMap<SnakeDirection, Double> values = new HashMap<>();
 
     final MapCoordinate curC = tick.mapUtil.getMyPosition();
@@ -26,13 +28,13 @@ public class AreaWiggleRoomBehavior extends Behavior {
     if (directions.contains(SnakeDirection.LEFT) && directions.contains(SnakeDirection.RIGHT)
         && (curC.y == 1 || curC.y == tick.mapUpdateEvent.getMap().getHeight() - 2)) {
       if (curC.y == 1) {
-        tick.area.artificialObstacles.add(curC.translateBy(0, -1));
+        area.artificialObstacles.add(curC.translateBy(0, -1));
       } else if (curC.y == tick.mapUpdateEvent.getMap().getHeight() - 2) {
-        tick.area.artificialObstacles.add(curC.translateBy(0, 1));
+        area.artificialObstacles.add(curC.translateBy(0, 1));
       }
 
-      final double areaLeft = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.LEFT, curC)).size();
-      final double areaRight = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.RIGHT, curC)).size();
+      final double areaLeft = area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.LEFT, curC)).size();
+      final double areaRight = area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.RIGHT, curC)).size();
 
       values.put(SnakeDirection.LEFT, areaLeft);
       values.put(SnakeDirection.RIGHT, areaRight);
@@ -42,13 +44,13 @@ public class AreaWiggleRoomBehavior extends Behavior {
     } else if (directions.contains(SnakeDirection.UP) && directions.contains(SnakeDirection.DOWN)
         && (curC.x == 1 || curC.x == tick.mapUpdateEvent.getMap().getWidth() - 2)) {
       if (curC.x == 1) {
-        tick.area.artificialObstacles.add(curC.translateBy(-1, 0));
+        area.artificialObstacles.add(curC.translateBy(-1, 0));
       } else if (curC.x == tick.mapUpdateEvent.getMap().getWidth() - 2) {
-        tick.area.artificialObstacles.add(curC.translateBy(1, 0));
+        area.artificialObstacles.add(curC.translateBy(1, 0));
       }
 
-      final double areaUp = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.UP, curC)).size();
-      final double areaDown = tick.area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.DOWN, curC)).size();
+      final double areaUp = area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.UP, curC)).size();
+      final double areaDown = area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.DOWN, curC)).size();
 
       values.put(SnakeDirection.UP, areaUp);
       values.put(SnakeDirection.DOWN, areaDown);
@@ -64,17 +66,15 @@ public class AreaWiggleRoomBehavior extends Behavior {
 
     double value = 0;
 
-    for (double area : unprocessedValuesSorted) {
+    for (double curArea : unprocessedValuesSorted) {
       for (SnakeDirection direction : values.keySet()) {
-        if (values.get(direction) == area) {
+        if (values.get(direction) == curArea) {
           values.put(direction, value);
         }
       }
 
       value++;
     }
-
-    tick.area.artificialObstacles.clear();
 
     return values;
   }
