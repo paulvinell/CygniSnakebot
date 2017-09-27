@@ -11,8 +11,8 @@ import se.cygni.snake.client.MapCoordinate;
 
 public abstract class Behavior implements Runnable {
 
-  public static WeakHashMap<SnakeDirection, Double> values = new WeakHashMap<>();
-  public static ArrayList<Behavior> behaviors = new ArrayList<>();
+  public static final WeakHashMap<SnakeDirection, Double> values = new WeakHashMap<>();
+  private static final ArrayList<Behavior> behaviors = new ArrayList<>();
 
   protected static List<SnakeDirection> directions;
   protected static long currentTick;
@@ -24,16 +24,14 @@ public abstract class Behavior implements Runnable {
     values.put(SnakeDirection.RIGHT, 0D);
   }
 
-  public static final SnakeDirection getBestMove(final List<SnakeDirection> directions) {
-    long nano = System.nanoTime();
-
+  public static final SnakeDirection getBestMove(final List<SnakeDirection> directions, long nanoseconds) {
     Behavior.directions = directions;
     currentTick = Tick.tick.mapUpdateEvent.getGameTick();
 
     resetValues();
     callBehaviors();
 
-    while (areBehaviorsRunning() && (System.nanoTime() - nano < 2100000000L)) {
+    while (areBehaviorsRunning() && (System.nanoTime() - nanoseconds < 1000000000L)) { //2100000000L
       try {
         Thread.sleep(1);
       } catch (InterruptedException e) {}
@@ -54,7 +52,11 @@ public abstract class Behavior implements Runnable {
     return bestDirection;
   }
 
-  public static final boolean areBehaviorsRunning() {
+  public static final void clearBehaviors() {
+    behaviors.clear();
+  }
+
+  private static final boolean areBehaviorsRunning() {
     for (Behavior b : behaviors) {
       if (b.lastGameTick != Tick.tick.mapUpdateEvent.getGameTick()) {
         return true;

@@ -6,7 +6,7 @@ import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.client.MapCoordinate;
 
-public class DirectAntiSnakeCollisionBehavior extends Behavior {
+public final class DirectAntiSnakeCollisionBehavior extends Behavior {
 
   public DirectAntiSnakeCollisionBehavior(Tick tick) {
     super(tick);

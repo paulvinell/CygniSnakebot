@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class SimpleSnakePlayer extends BaseSnakeClient {
+public final class SimpleSnakePlayer extends BaseSnakeClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleSnakePlayer.class);
 
@@ -77,31 +77,10 @@ public class SimpleSnakePlayer extends BaseSnakeClient {
     }
 
     @Override
-    public void onMapUpdate(MapUpdateEvent mapUpdateEvent) {
+    public final void onMapUpdate(final MapUpdateEvent mapUpdateEvent) {
         ansiPrinter.printMap(mapUpdateEvent);
 
-        // MapUtil contains lot's of useful methods for querying the map!
-        MapUtil mapUtil = new MapUtil(mapUpdateEvent.getMap(), getPlayerId());
-
         tick.onMapUpdate(mapUpdateEvent);
-
-//        List<SnakeDirection> directions = new ArrayList<>();
-//
-//        // Let's see in which directions I can move
-//        for (SnakeDirection direction : SnakeDirection.values()) {
-//            if (mapUtil.canIMoveInDirection(direction)) {
-//                directions.add(direction);
-//            }
-//        }
-//        Random r = new Random();
-//        SnakeDirection chosenDirection = SnakeDirection.DOWN;
-//
-//        // Choose a random direction
-//        if (!directions.isEmpty())
-//            chosenDirection = directions.get(r.nextInt(directions.size()));
-//
-//        // Register action here!
-//        registerMove(mapUpdateEvent.getGameTick(), chosenDirection);
     }
 
 

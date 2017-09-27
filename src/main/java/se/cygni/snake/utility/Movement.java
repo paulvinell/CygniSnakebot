@@ -1,12 +1,13 @@
 package se.cygni.snake.utility;
 
+import java.util.Arrays;
 import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.Map;
 import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.api.model.SnakeInfo;
 import se.cygni.snake.client.MapCoordinate;
 
-public class Movement {
+public final class Movement {
 
   private final Tick tick;
 
@@ -29,8 +30,6 @@ public class Movement {
   }
 
   public final boolean isTileAvailableForMovementTo(final MapCoordinate coordinate) {
-//    return isEnemyTailAtAndAttackable(coordinate) || tick.mapUtil.isTileAvailableForMovementTo(coordinate);
-
     final int position = tick.coordinates.translateCoordinate(coordinate);
 
     snakeCheck:
@@ -101,42 +100,8 @@ public class Movement {
   public final boolean isPartOfThisHeadOrNeck(final MapCoordinate coordinate) {
     final MapCoordinate[] snakeSpread = tick.mapUtil.getSnakeSpread(tick.mapUpdateEvent.getReceivingPlayerId());
 
-    if (snakeSpread[0].x == coordinate.x && snakeSpread[0].y == coordinate.y) {
-      return true;
-    } else if(snakeSpread.length > 1 && snakeSpread[1].x == coordinate.x && snakeSpread[1].y == coordinate.y) {
-      return true;
-    }
-
-    return false;
-  }
-
-  public final boolean isPartOfThisSnake(final MapCoordinate coordinate) {
-    for (final MapCoordinate curC : tick.mapUtil.getSnakeSpread(tick.mapUpdateEvent.getReceivingPlayerId())) {
-      if (curC.x == coordinate.x && curC.y == coordinate.y) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  public final boolean isEnemyTailAtAndAttackable(final MapCoordinate coordinate) {
-    for (final SnakeInfo enemy : tick.mapUpdateEvent.getMap().getSnakeInfos()) {
-      if (!enemy.isAlive()
-          || enemy.getId().equals(tick.mapUpdateEvent.getReceivingPlayerId())
-          || enemy.getLength() == 1
-          || enemy.getTailProtectedForGameTicks() > 0) {
-        continue;
-      }
-
-      final MapCoordinate tailPos = tick.mapUtil.translatePosition(enemy.getPositions()[enemy.getLength() - 1]);
-
-      if (tailPos.x == coordinate.x && tailPos.y == coordinate.y) {
-        return true;
-      }
-    }
-
-    return false;
+    return (snakeSpread[0].x == coordinate.x && snakeSpread[0].y == coordinate.y)
+          || (snakeSpread.length > 1 && snakeSpread[1].x == coordinate.x && snakeSpread[1].y == coordinate.y);
   }
 
   public final boolean isEnemyHeadAt(final MapCoordinate coordinate) {

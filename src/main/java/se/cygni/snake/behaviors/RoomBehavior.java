@@ -9,7 +9,7 @@ import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.client.MapCoordinate;
 
-public class RoomBehavior extends Behavior {
+public final class RoomBehavior extends Behavior {
 
   public RoomBehavior(Tick tick) {
     super(tick);

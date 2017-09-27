@@ -21,10 +21,14 @@ import se.cygni.snake.utility.Movement;
 import se.cygni.snake.utility.RelativeDirection;
 import se.cygni.snake.utility.Room;
 
-public class Tick {
+public final class Tick {
 
   /**
    * To do:
+   *
+   * Above all and most importantly - OPTIMIZE AND TRY TO SHUT DOWN REMAINING THREADS.
+   * The more calculcations able to be run simultaneously the better.
+   * The bot is pretty damn good already, so this is the most important part.
    *
    * http://game.snake.cygni.se/#/viewgame/d63edd72-d65d-4eba-ae2c-c988467532f7?_k=wsjedn
    * Very very simple, add a behavior that penalizes walking to tiles that enemies' only option is to go to.
@@ -52,9 +56,7 @@ public class Tick {
    *
    * Only difference is that a wall is besides the snake:
    * http://game.snake.cygni.se/#/viewgame/c2846515-9d2a-4102-8d61-a5fc8566e639?_k=dgfcnk
-   * avoid this death by adding an artificial tile between snakes and walk toward biggest area
-   *
-   * http://game.snake.cygni.se/#/viewgame/fd3ee8e4-71e6-4e55-8021-0d9c3ff52f07?_k=fndou8
+   * avoid this death by adding an artificial tile between snakes and walk toward biggest are
    *
    * http://game.snake.cygni.se/#/viewgame/a7ee7e8e-7d20-409f-8a17-f94f80ae34cf?_k=9wprre
    * check if area calculation is relevant one step forward
@@ -77,8 +79,9 @@ public class Tick {
   public MapUpdateEvent mapUpdateEvent;
   public MapUtil mapUtil;
 
-  public Tick(SimpleSnakePlayer ssp, GameSettings gameSettings) {
+  public Tick(final SimpleSnakePlayer ssp, final GameSettings gameSettings) {
     Tick.tick = this;
+    Behavior.clearBehaviors();
 
     this.ssp = ssp;
     this.gameSettings = gameSettings;
@@ -120,11 +123,11 @@ public class Tick {
     } else if (directions.size() == 1) {
       direction = directions.get(0);
     } else if (directions.size() >= 2) {
-      direction = Behavior.getBestMove(directions);
+      direction = Behavior.getBestMove(directions, nano);
     }
 
     ssp.registerMove(mapUpdateEvent.getGameTick(), direction);
 
-    System.out.println((System.nanoTime() - nano) / Math.pow(10, 9));
+    //System.out.println((System.nanoTime() - nano) / Math.pow(10, 9));
   }
 }

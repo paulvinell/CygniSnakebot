@@ -7,7 +7,7 @@ import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.client.MapCoordinate;
 
-public class Room {
+public final class Room {
 
   private final Tick tick;
 
@@ -50,8 +50,8 @@ public class Room {
           }
         }
 
-        boolean containsVertical = moves.contains(SnakeDirection.UP) || moves.contains(SnakeDirection.DOWN);
-        boolean containsHorizontal = moves.contains(SnakeDirection.LEFT) || moves.contains(SnakeDirection.RIGHT);
+        final boolean containsVertical = moves.contains(SnakeDirection.UP) || moves.contains(SnakeDirection.DOWN);
+        final boolean containsHorizontal = moves.contains(SnakeDirection.LEFT) || moves.contains(SnakeDirection.RIGHT);
 
         if (containsVertical && containsHorizontal) {
           for (final SnakeDirection move : moves) {

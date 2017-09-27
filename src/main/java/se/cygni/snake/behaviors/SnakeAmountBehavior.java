@@ -7,7 +7,7 @@ import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.api.model.SnakeInfo;
 import se.cygni.snake.client.MapCoordinate;
 
-public class SnakeAmountBehavior extends Behavior {
+public final class SnakeAmountBehavior extends Behavior {
 
   public SnakeAmountBehavior(Tick tick) {
     super(tick);

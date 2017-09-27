@@ -8,7 +8,7 @@ import se.cygni.snake.api.event.MapUpdateEvent;
 import se.cygni.snake.client.MapCoordinate;
 import se.cygni.snake.client.MapUtil;
 
-public class Area {
+public final class Area {
 
   private final Tick tick;
 

@@ -7,7 +7,7 @@ import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.client.MapCoordinate;
 
-public class AvoidHeadTrapBehavior extends Behavior {
+public final class AvoidHeadTrapBehavior extends Behavior {
 
   public AvoidHeadTrapBehavior(Tick tick) {
     super(tick);

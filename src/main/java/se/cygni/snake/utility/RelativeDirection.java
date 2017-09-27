@@ -5,7 +5,7 @@ import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.client.MapCoordinate;
 
-public class RelativeDirection {
+public final class RelativeDirection {
 
   public enum Direction {
     FORWARD, RIGHT, BACK, LEFT
@@ -15,6 +15,7 @@ public class RelativeDirection {
   private final Direction[] relativeDirections = new Direction[4];
 
   private final Tick tick;
+  private SnakeDirection forward;
 
   public RelativeDirection(Tick tick) {
     this.tick = tick;
@@ -28,6 +29,12 @@ public class RelativeDirection {
     relativeDirections[1] = Direction.RIGHT;
     relativeDirections[2] = Direction.BACK;
     relativeDirections[3] = Direction.LEFT;
+  }
+
+  public RelativeDirection(final SnakeDirection forward, final Tick tick) {
+    this(tick);
+
+    this.forward = forward;
   }
 
   public final MapCoordinate getCoordinateRelativeDirection(final MapCoordinate position, final Direction direction) {
@@ -100,6 +107,10 @@ public class RelativeDirection {
   }
 
   public final SnakeDirection getCurrentSnakeDirection() {
+    if (forward != null) {
+      return forward;
+    }
+
     final MapCoordinate[] coordinates = tick.mapUtil
         .getSnakeSpread(tick.mapUpdateEvent.getReceivingPlayerId());
 

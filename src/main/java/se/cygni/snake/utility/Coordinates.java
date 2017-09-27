@@ -3,7 +3,7 @@ package se.cygni.snake.utility;
 import se.cygni.snake.Tick;
 import se.cygni.snake.client.MapCoordinate;
 
-public class Coordinates {
+public final class Coordinates {
 
   private final Tick tick;
 
