@@ -21,10 +21,24 @@ public class IndirectAntiSnakeCollisionBehavior extends Behavior {
     for (SnakeDirection direction : directions) {
       final Direction currentDirection = tick.relativeDirection.getRelativeDirection(direction);
 
-      final boolean left = isSnakeApproachingThroughPseudoCorridor(direction, Direction.LEFT, 2)
-          || isSnakeApproachingThroughPseudoCorridor(direction, Direction.LEFT, 3);
-      final boolean right = isSnakeApproachingThroughPseudoCorridor(direction, Direction.RIGHT, 2)
-          || isSnakeApproachingThroughPseudoCorridor(direction, Direction.RIGHT, 3);
+      boolean left = false;
+      boolean right = false;
+
+      switch (currentDirection) {
+        case LEFT:
+          right = isSnakeApproachingThroughPseudoCorridor(direction, Direction.RIGHT, 2)
+              || isSnakeApproachingThroughPseudoCorridor(direction, Direction.RIGHT, 3);
+          break;
+        case RIGHT:
+          left = isSnakeApproachingThroughPseudoCorridor(direction, Direction.LEFT, 2)
+              || isSnakeApproachingThroughPseudoCorridor(direction, Direction.LEFT, 3);
+          break;
+        default:
+          left = isSnakeApproachingThroughPseudoCorridor(direction, Direction.LEFT, 2)
+              || isSnakeApproachingThroughPseudoCorridor(direction, Direction.LEFT, 3);
+          right = isSnakeApproachingThroughPseudoCorridor(direction, Direction.RIGHT, 2)
+              || isSnakeApproachingThroughPseudoCorridor(direction, Direction.RIGHT, 3);
+      }
 
       if (left || right) {
         values.put(direction, -0.5D);
@@ -57,47 +71,4 @@ public class IndirectAntiSnakeCollisionBehavior extends Behavior {
 
     return false;
   }
-
-//  @Override
-//  public final HashMap<SnakeDirection, Double> getValues(final List<SnakeDirection> directions) {
-//    final HashMap<SnakeDirection, Double> values = new HashMap<>();
-//
-//    final SnakeDirection currentDirection = tick.relativeDirection.getCurrentSnakeDirection();
-//
-//    if (directions.contains(currentDirection)) {
-//      final boolean left = isSnakeApproachingThroughPseudoCorridor(Direction.LEFT, 2)
-//          || isSnakeApproachingThroughPseudoCorridor(Direction.LEFT, 3);
-//      final boolean right = isSnakeApproachingThroughPseudoCorridor(Direction.RIGHT, 2)
-//          || isSnakeApproachingThroughPseudoCorridor(Direction.RIGHT, 3);
-//
-//      if (left || right) {
-//        values.put(currentDirection, -0.5D);
-//      }
-//    }
-//
-//    return values;
-//  }
-//
-//  public final boolean isSnakeApproachingThroughPseudoCorridor(final Direction enemyDirection, final int forwardAmount) {
-//    MapCoordinate curP = tick.mapUtil.getMyPosition();
-//
-//    for (int i = 0; i < forwardAmount; i++) {
-//      MapCoordinate enemySide = tick.relativeDirection.getCoordinateRelativeDirection(curP, enemyDirection);
-//
-//      if (i != forwardAmount -1
-//          && i > 0
-//          && (!tick.movement.isTileAvailableForMovementTo(curP)
-//          || !tick.movement.isTileAvailableForMovementTo(enemySide))) {
-//        return false;
-//      }
-//
-//      if (i == forwardAmount - 1 && tick.movement.isEnemyHeadAt(enemySide)) {
-//        return true;
-//      }
-//
-//      curP = tick.relativeDirection.getCoordinateRelativeDirection(curP, Direction.FORWARD);
-//    }
-//
-//    return false;
-//  }
 }

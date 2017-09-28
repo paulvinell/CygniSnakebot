@@ -31,7 +31,7 @@ public abstract class Behavior implements Runnable {
     resetValues();
     callBehaviors();
 
-    while (areBehaviorsRunning() && (System.nanoTime() - nanoseconds < 1000000000L)) { //2100000000L
+    while (areBehaviorsRunning() && (System.nanoTime() - nanoseconds < 1800000000L)) { //2100000000L
       try {
         Thread.sleep(1);
       } catch (InterruptedException e) {}
@@ -39,9 +39,13 @@ public abstract class Behavior implements Runnable {
 
     double bestScore = Double.MIN_VALUE;
     SnakeDirection bestDirection = SnakeDirection.DOWN;
+    final SnakeDirection curDirection = Tick.tick.relativeDirection.getCurrentSnakeDirection();
 
+//    System.out.println();
+//    System.out.println("Sum " + currentTick);
     synchronized (values) {
       for (SnakeDirection direction : values.keySet()) {
+//        System.out.println(direction + " " + values.get(direction));
         if (directions.contains(direction) && values.get(direction) > bestScore) {
           bestScore = values.get(direction);
           bestDirection = direction;
@@ -93,8 +97,11 @@ public abstract class Behavior implements Runnable {
     final HashMap<SnakeDirection, Double> behaviorValues = this.getValues(directions);
 
     if (currentTick == workingTick) {
+//      System.out.println();
+//      System.out.println(workingTick + " " + this.getClass());
       synchronized (values) {
         for (final SnakeDirection direction : behaviorValues.keySet()) {
+//          System.out.println(direction + " " + behaviorValues.get(direction));
           values.put(direction, values.get(direction) + behaviorValues.get(direction));
         }
       }

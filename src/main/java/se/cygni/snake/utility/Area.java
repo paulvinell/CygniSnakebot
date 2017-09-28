@@ -48,8 +48,12 @@ public final class Area {
           if (tick.movement.isTileAvailableForMovementTo(move)) {
             final Integer currentPosition = tick.coordinates.translateCoordinate(move);
 
+            final int traversableSize = traversable.size();
             traversable.add(currentPosition);
-            current.add(currentPosition);
+
+            if (traversable.size() > traversableSize) {
+              current.add(currentPosition);
+            }
           }
         }
       }

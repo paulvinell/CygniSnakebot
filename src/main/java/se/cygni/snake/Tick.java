@@ -128,6 +128,6 @@ public final class Tick {
 
     ssp.registerMove(mapUpdateEvent.getGameTick(), direction);
 
-    //System.out.println((System.nanoTime() - nano) / Math.pow(10, 9));
+    System.out.println((System.nanoTime() - nano) / Math.pow(10, 9));
   }
 }

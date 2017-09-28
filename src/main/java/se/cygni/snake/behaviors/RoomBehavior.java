@@ -48,7 +48,7 @@ public final class RoomBehavior extends Behavior {
         }
       }
 
-      value++;
+      value += 0.75;
     }
 
     return values;

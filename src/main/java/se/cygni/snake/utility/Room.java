@@ -59,8 +59,12 @@ public final class Room {
                 = tick.coordinates.translateCoordinate(
                     tick.movement.getNewCoordinate(move, mapC));
 
+            final int traversableSize = traversable.size();
             traversable.add(currentPosition);
-            current.add(currentPosition);
+
+            if (traversable.size() > traversableSize) {
+              current.add(currentPosition);
+            }
           }
         }
       }
