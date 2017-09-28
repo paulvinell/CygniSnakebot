@@ -44,7 +44,7 @@ public final class Movement {
           if (i < positions.length - 1){
             final int distance = tick.mapUtil.getMyPosition().getManhattanDistanceTo(coordinate);
 
-            if (((positions.length - 1) - i) + Math.ceil(distance / getGrowthFrequency()) < distance) {
+            if (((positions.length - 1) - i) + Math.ceil(distance / getGrowthFrequency()) + 1 < distance) {
               return true;
             }
           } else if (positions.length > 1
