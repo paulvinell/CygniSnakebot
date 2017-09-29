@@ -11,7 +11,7 @@ import se.cygni.snake.behaviors.AvoidHeadTrapBehavior;
 import se.cygni.snake.behaviors.IndirectAntiSnakeCollisionBehavior;
 import se.cygni.snake.behaviors.RoomBehavior;
 import se.cygni.snake.behaviors.SnakeAmountBehavior;
-import se.cygni.snake.behaviors.WiggleRoomBehavior;
+import se.cygni.snake.behaviors.WiggleRoomAreaBehavior;
 import se.cygni.snake.api.event.MapUpdateEvent;
 import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.client.MapUtil;
@@ -33,8 +33,6 @@ public final class Tick {
    * http://game.snake.cygni.se/#/viewgame/d63edd72-d65d-4eba-ae2c-c988467532f7?_k=wsjedn
    * Very very simple, add a behavior that penalizes walking to tiles that enemies' only option is to go to.
    * Check where they can go, if it's only one tile. Penalize
-   *
-   * http://game.snake.cygni.se/#/viewgame/2e1a62c9-2f8a-4dfe-8693-31774f05ac9e went into tail
    *
    * Pathfinding
    * Find the point which is furthest away from all enemies
@@ -97,7 +95,7 @@ public final class Tick {
     new IndirectAntiSnakeCollisionBehavior(this);
     new SnakeAmountBehavior(this);
     new RoomBehavior(this);
-    new WiggleRoomBehavior(this);
+    new WiggleRoomAreaBehavior(this);
   }
 
   public final void onMapUpdate(final MapUpdateEvent mapUpdateEvent) {
