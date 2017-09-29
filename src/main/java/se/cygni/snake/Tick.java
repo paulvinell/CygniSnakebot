@@ -3,6 +3,7 @@ package se.cygni.snake;
 import java.util.ArrayList;
 import java.util.List;
 import se.cygni.snake.api.model.GameSettings;
+import se.cygni.snake.behaviors.CorridorAttackBehavior;
 import se.cygni.snake.behaviors.DirectAntiSnakeCollisionBehavior;
 import se.cygni.snake.behaviors.AreaBehavior;
 import se.cygni.snake.behaviors.AreaWiggleRoomBehavior;
@@ -10,8 +11,9 @@ import se.cygni.snake.behaviors.Behavior;
 import se.cygni.snake.behaviors.AvoidHeadTrapBehavior;
 import se.cygni.snake.behaviors.IndirectAntiSnakeCollisionBehavior;
 import se.cygni.snake.behaviors.RoomBehavior;
+import se.cygni.snake.behaviors.RoomWiggleRoomBehavior;
 import se.cygni.snake.behaviors.SnakeAmountBehavior;
-import se.cygni.snake.behaviors.WiggleRoomAreaBehavior;
+import se.cygni.snake.behaviors.WiggleRoomBehavior;
 import se.cygni.snake.api.event.MapUpdateEvent;
 import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.client.MapUtil;
@@ -24,25 +26,31 @@ import se.cygni.snake.utility.Room;
 public final class Tick {
 
   /**
+   * Hall of fame:
+   * http://game.snake.cygni.se/#/viewgame/5c9bcd00-8a34-4ba4-9f6e-7a3fe7a1606f?_k=hvy96k
+   * http://game.snake.cygni.se/#/viewgame/c45ca2cc-004f-4e2d-8482-d9c5097cb1fb?_k=mek6rm
+   * http://game.snake.cygni.se/#/viewgame/e04c06a0-5aa6-4ccb-9a4d-dcee07201356?_k=vulr3u
+   *
+   * http://game.snake.cygni.se/#/viewgame/caf4f04c-94ff-4d33-bf05-9ec65eebd09e?_k=uf3jp8
+   * straight fucking savage killing shit
+   *
+   * technically, you can win the game if only two snakes are alive
+   * and you have more points, and execute both head-to-head
+   * Disable anti snake collision behaviors and go toward enemy
+   * http://game.snake.cygni.se/#/viewgame/4d81775f-4a83-4389-b029-17b4ed164f2a?_k=p6sz9o
+   *
    * To do:
    *
-   * Above all and most importantly - OPTIMIZE AND TRY TO SHUT DOWN REMAINING THREADS.
-   * The more calculcations able to be run simultaneously the better.
-   * The bot is pretty damn good already, so this is the most important part.
+   * implement pathfinding for corridor attack
+   *
+   * add behavior that checks if the room the snake is in can be cut off by other snakes
+   *
+   * http://game.snake.cygni.se/#/viewgame/7c7fb2c2-30c4-44ff-b3c7-4ca72c2737b6?_k=jr8t69
+   * unintentional indirect snake behavior
    *
    * http://game.snake.cygni.se/#/viewgame/d63edd72-d65d-4eba-ae2c-c988467532f7?_k=wsjedn
    * Very very simple, add a behavior that penalizes walking to tiles that enemies' only option is to go to.
    * Check where they can go, if it's only one tile. Penalize
-   *
-   * Pathfinding
-   * Find the point which is furthest away from all enemies
-   * Constantly move toward that point if possible
-   *
-   * Add Indirect collision avoidance
-   * Definitely add corridor avoidance
-   * Penalize closed corridors even more
-   *
-   * replace area wiggle room with room wiggle room
    *
    * http://game.snake.cygni.se/#/viewgame/d2b919b4-d95d-4a3a-a38e-919e13aceb26?_k=fdcujp
    * fuck
@@ -91,11 +99,13 @@ public final class Tick {
     new AreaBehavior(this);
     new AreaWiggleRoomBehavior(this);
     new AvoidHeadTrapBehavior(this);
+    new CorridorAttackBehavior(this);
     new DirectAntiSnakeCollisionBehavior(this);
     new IndirectAntiSnakeCollisionBehavior(this);
     new SnakeAmountBehavior(this);
     new RoomBehavior(this);
-    new WiggleRoomAreaBehavior(this);
+    new RoomWiggleRoomBehavior(this);
+    new WiggleRoomBehavior(this);
   }
 
   public final void onMapUpdate(final MapUpdateEvent mapUpdateEvent) {
@@ -124,6 +134,6 @@ public final class Tick {
 
     ssp.registerMove(mapUpdateEvent.getGameTick(), direction);
 
-    System.out.println((System.nanoTime() - nano) / Math.pow(10, 9));
+    //lSystem.out.println((System.nanoTime() - nano) / Math.pow(10, 9));
   }
 }

@@ -3,6 +3,7 @@ package se.cygni.snake.utility;
 import java.util.ArrayList;
 import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.SnakeDirection;
+import se.cygni.snake.api.model.SnakeInfo;
 import se.cygni.snake.client.MapCoordinate;
 
 public final class RelativeDirection {
@@ -111,8 +112,12 @@ public final class RelativeDirection {
       return forward;
     }
 
+    return getCurrentSnakeDirection(tick.mapUpdateEvent.getReceivingPlayerId());
+  }
+
+  public final SnakeDirection getCurrentSnakeDirection(String id) {
     final MapCoordinate[] coordinates = tick.mapUtil
-        .getSnakeSpread(tick.mapUpdateEvent.getReceivingPlayerId());
+        .getSnakeSpread(id);
 
     if (coordinates.length > 1) {
       final int dX = coordinates[0].x - coordinates[1].x;

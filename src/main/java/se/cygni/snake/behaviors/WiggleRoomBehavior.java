@@ -6,9 +6,9 @@ import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.SnakeDirection;
 import se.cygni.snake.client.MapCoordinate;
 
-public final class WiggleRoomAreaBehavior extends Behavior {
+public final class WiggleRoomBehavior extends Behavior {
 
-  public WiggleRoomAreaBehavior(Tick tick) {
+  public WiggleRoomBehavior(Tick tick) {
     super(tick);
   }
 
