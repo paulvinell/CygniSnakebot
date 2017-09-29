@@ -41,10 +41,10 @@ public final class Movement {
       final int[] positions = snake.getPositions();
       for (int i = 0; i < positions.length; i++) {
         if (position == positions[i]) {
-          if (i < positions.length - 1){
+          if (i < positions.length - 1) {
             final int distance = tick.mapUtil.getMyPosition().getManhattanDistanceTo(coordinate);
 
-            if (((positions.length - 1) - i) + Math.ceil(distance / getGrowthFrequency()) + 1 < distance) {
+            if (((positions.length - 1) - i) + Math.ceil((double) distance / getGrowthFrequency()) + 1 < distance) {
               return true;
             }
           } else if (positions.length > 1

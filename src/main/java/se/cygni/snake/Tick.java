@@ -34,6 +34,8 @@ public final class Tick {
    * Very very simple, add a behavior that penalizes walking to tiles that enemies' only option is to go to.
    * Check where they can go, if it's only one tile. Penalize
    *
+   * http://game.snake.cygni.se/#/viewgame/2e1a62c9-2f8a-4dfe-8693-31774f05ac9e went into tail
+   *
    * Pathfinding
    * Find the point which is furthest away from all enemies
    * Constantly move toward that point if possible
@@ -44,12 +46,8 @@ public final class Tick {
    *
    * replace area wiggle room with room wiggle room
    *
-   * add room check. like area but don't add a tile if it only has two allowed tiles besides it
-   *
    * http://game.snake.cygni.se/#/viewgame/d2b919b4-d95d-4a3a-a38e-919e13aceb26?_k=fdcujp
    * fuck
-   *
-   * dont just calculate areas, calculate rooms too
    *
    * http://game.snake.cygni.se/#/viewgame/dbb3f8b0-3528-439e-b5fb-334618b16f08?_k=rm2vk5
    * fix defense against attack involving wiggle room exploit
