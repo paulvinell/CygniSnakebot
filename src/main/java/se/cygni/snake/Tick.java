@@ -45,18 +45,12 @@ public final class Tick {
    *
    * add behavior that checks if the room the snake is in can be cut off by other snakes
    *
-   * http://game.snake.cygni.se/#/viewgame/7c7fb2c2-30c4-44ff-b3c7-4ca72c2737b6?_k=jr8t69
-   * unintentional indirect snake behavior
-   *
    * http://game.snake.cygni.se/#/viewgame/d63edd72-d65d-4eba-ae2c-c988467532f7?_k=wsjedn
    * Very very simple, add a behavior that penalizes walking to tiles that enemies' only option is to go to.
    * Check where they can go, if it's only one tile. Penalize
    *
    * http://game.snake.cygni.se/#/viewgame/d2b919b4-d95d-4a3a-a38e-919e13aceb26?_k=fdcujp
    * fuck
-   *
-   * http://game.snake.cygni.se/#/viewgame/dbb3f8b0-3528-439e-b5fb-334618b16f08?_k=rm2vk5
-   * fix defense against attack involving wiggle room exploit
    *
    * Only difference is that a wall is besides the snake:
    * http://game.snake.cygni.se/#/viewgame/c2846515-9d2a-4102-8d61-a5fc8566e639?_k=dgfcnk

@@ -45,13 +45,13 @@ public final class SnakeAmountBehavior extends Behavior {
       }
     }
 
-    if (snakesLeft < snakesRight) {
+    if (snakesLeft > snakesRight) {
       values.put(SnakeDirection.RIGHT, 0.25D);
     } else {
       values.put(SnakeDirection.LEFT, 0.25D);
     }
 
-    if (snakesDown < snakesUp) {
+    if (snakesDown > snakesUp) {
       values.put(SnakeDirection.UP, 0.25D);
     } else {
       values.put(SnakeDirection.DOWN, 0.25D);
