@@ -73,8 +73,6 @@ public class CorridorAttackBehavior extends Behavior {
       } else if (dY == -1) {
         values.put(SnakeDirection.UP, value);
       }
-
-      System.out.println("Kicking a fucker down in direction");
     }
 
     return values;

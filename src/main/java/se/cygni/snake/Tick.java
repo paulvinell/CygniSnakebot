@@ -35,14 +35,16 @@ public final class Tick {
    * http://game.snake.cygni.se/#/viewgame/caf4f04c-94ff-4d33-bf05-9ec65eebd09e?_k=uf3jp8
    * straight fucking savage killing shit
    *
+   * http://game.snake.cygni.se/#/viewgame/9fb8f98c-f471-4a8f-aab2-4da468faf06b?_k=urib0t
+   * cuts off the route for two snakes,
+   * then wins the game by colliding with enemy when ahead of points
+   *
    * technically, you can win the game if only two snakes are alive
    * and you have more points, and execute both head-to-head
    * Disable anti snake collision behaviors and go toward enemy
    * http://game.snake.cygni.se/#/viewgame/4d81775f-4a83-4389-b029-17b4ed164f2a?_k=p6sz9o
    *
    * To do:
-   *
-   * implement pathfinding for corridor attack
    *
    * add behavior that checks if the room the snake is in can be cut off by other snakes
    *
