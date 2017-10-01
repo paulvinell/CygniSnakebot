@@ -15,7 +15,7 @@ public abstract class Behavior implements Runnable {
   private static final ArrayList<Behavior> behaviors = new ArrayList<>();
 
   protected static List<SnakeDirection> directions;
-  protected static long currentTick;
+  public static long currentTick;
 
   static {
     values.put(SnakeDirection.UP, 0D);
