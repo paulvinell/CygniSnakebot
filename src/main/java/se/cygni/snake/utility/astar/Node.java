@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import se.cygni.snake.client.MapCoordinate;
 
-public class Node {
+public final class Node {
 
   public MapCoordinate coordinate;
 

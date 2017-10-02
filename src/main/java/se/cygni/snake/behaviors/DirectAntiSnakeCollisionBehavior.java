@@ -13,6 +13,11 @@ public final class DirectAntiSnakeCollisionBehavior extends Behavior {
   }
 
   @Override
+  protected final boolean canRun() {
+    return true;
+  }
+
+  @Override
   public final HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions) {
     final HashMap<SnakeDirection, Double> values = new HashMap<>();
 
@@ -46,7 +51,7 @@ public final class DirectAntiSnakeCollisionBehavior extends Behavior {
       sideTwo = curC.translateBy(0, -1);
     }
 
-    return tick.movement.isEnemyHeadAt(sideOne) || tick.movement.isEnemyHeadAt(sideTwo);
+    return tick.snakeHandler.isEnemyHeadAt(sideOne) || tick.snakeHandler.isEnemyHeadAt(sideTwo);
   }
 
   public final boolean canCollideWithEnemyHeadInDirection(final SnakeDirection direction, final int steps) {
@@ -60,6 +65,6 @@ public final class DirectAntiSnakeCollisionBehavior extends Behavior {
       }
     }
 
-    return tick.movement.isEnemyHeadAt(curPos);
+    return tick.snakeHandler.isEnemyHeadAt(curPos);
   }
 }

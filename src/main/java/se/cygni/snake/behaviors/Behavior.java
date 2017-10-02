@@ -92,21 +92,27 @@ public abstract class Behavior implements Runnable {
     behaviors.add(this);
   }
 
-  public void run() {
-    final long workingTick = tick.mapUpdateEvent.getGameTick();
-    final HashMap<SnakeDirection, Double> behaviorValues = this.getValues(directions);
+  protected abstract boolean canRun();
 
-    if (currentTick == workingTick) {
+  public final void run() {
+    if (this.canRun()) {
+      final long workingTick = tick.mapUpdateEvent.getGameTick();
+      final HashMap<SnakeDirection, Double> behaviorValues = this.getValues(directions);
+
+      if (currentTick == workingTick) {
 //      System.out.println();
 //      System.out.println(workingTick + " " + this.getClass());
-      synchronized (values) {
-        for (final SnakeDirection direction : behaviorValues.keySet()) {
+        synchronized (values) {
+          for (final SnakeDirection direction : behaviorValues.keySet()) {
 //          System.out.println(direction + " " + behaviorValues.get(direction));
-          values.put(direction, values.get(direction) + behaviorValues.get(direction));
+            values.put(direction, values.get(direction) + behaviorValues.get(direction));
+          }
         }
-      }
 
-      lastGameTick = workingTick;
+        lastGameTick = workingTick;
+      }
+    } else {
+      lastGameTick = Behavior.currentTick;
     }
   }
 

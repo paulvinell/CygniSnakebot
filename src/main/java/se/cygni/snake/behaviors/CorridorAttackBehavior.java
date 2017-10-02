@@ -9,14 +9,19 @@ import se.cygni.snake.client.MapCoordinate;
 import se.cygni.snake.utility.Corridor;
 import se.cygni.snake.utility.astar.Pathfinder;
 
-public class CorridorAttackBehavior extends Behavior {
+public final class CorridorAttackBehavior extends Behavior {
 
   public CorridorAttackBehavior(Tick tick) {
     super(tick);
   }
 
   @Override
-  public HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions) {
+  protected final boolean canRun() {
+    return true;
+  }
+
+  @Override
+  public final HashMap<SnakeDirection, Double> getValues(final List<SnakeDirection> directions) {
     final HashMap<SnakeDirection, Double> values = new HashMap<>();
 
     final MapCoordinate curPos = tick.mapUtil.getMyPosition();
@@ -24,12 +29,12 @@ public class CorridorAttackBehavior extends Behavior {
     Corridor bestCorridor = null;
     Pathfinder bestPath = null;
 
-    for (SnakeInfo snake : tick.mapUpdateEvent.getMap().getSnakeInfos()) {
+    for (final SnakeInfo snake : tick.mapUpdateEvent.getMap().getSnakeInfos()) {
       if (!snake.isAlive() || snake.getId() == tick.mapUpdateEvent.getReceivingPlayerId()) {
         continue;
       }
 
-      Corridor cur = new Corridor(tick, snake);
+      final Corridor cur = new Corridor(tick, snake);
 
       if (cur.isInCorridor()
           && tick.mapUtil.translatePosition(snake.getPositions()[0])
@@ -58,8 +63,8 @@ public class CorridorAttackBehavior extends Behavior {
     if (bestCorridor != null) {
       MapCoordinate nextTile = bestPath.path.get(0).coordinate;
 
-      int dX = (int) Math.signum(nextTile.x - curPos.x);
-      int dY = (int) Math.signum(nextTile.y - curPos.y);
+      final int dX = (int) Math.signum(nextTile.x - curPos.x);
+      final int dY = (int) Math.signum(nextTile.y - curPos.y);
 
       double value = (bestPath.path.size() == 1) ? 3 : 0.75;
 

@@ -16,13 +16,14 @@ public final class RoomBehavior extends Behavior {
   }
 
   @Override
+  protected final boolean canRun() {
+    return tick.movement.hasEncounteredSeparatingObstacles();
+  }
+
+  @Override
   public final HashMap<SnakeDirection, Double> getValues(final List<SnakeDirection> directions) {
     final HashMap<SnakeDirection, Double> values = new HashMap<>();
     final HashMap<SnakeDirection, Double> unprocessedMap = new HashMap<>();
-
-    if (!tick.movement.hasEncounteredSeparatingObstacles()) {
-      return unprocessedMap;
-    }
 
     final HashSet<Double> unprocessedValuesUnsorted = new HashSet<>();
 

@@ -14,6 +14,11 @@ public final class AvoidHeadTrapBehavior extends Behavior {
   }
 
   @Override
+  protected final boolean canRun() {
+    return true;
+  }
+
+  @Override
   public HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions) {
     HashMap<SnakeDirection, Double> values = new HashMap<>();
 
@@ -73,7 +78,7 @@ public final class AvoidHeadTrapBehavior extends Behavior {
       MapCoordinate oneSide = tick.movement.getNewCoordinate(curD, oneAhead);
       MapCoordinate twoSide = tick.movement.getNewCoordinate(curD, twoAhead);
 
-      if (tick.movement.isEnemyHeadAt(twoSide)) {
+      if (tick.snakeHandler.isEnemyHeadAt(twoSide)) {
         enemy = true;
       }
 
@@ -124,7 +129,7 @@ public final class AvoidHeadTrapBehavior extends Behavior {
         } else if (i == 1) {
           curC = tick.movement.getNewCoordinate(direction, curC);
 
-          if (tick.movement.isEnemyHeadAt(curC)) {
+          if (tick.snakeHandler.isEnemyHeadAt(curC)) {
             enemy = true;
             break;
           }
@@ -168,7 +173,7 @@ public final class AvoidHeadTrapBehavior extends Behavior {
         if (i == 0 && !tick.movement.isTileAvailableForMovementTo(curC)) {
           block = true;
           break;
-        } else if (i == 1 && tick.movement.isEnemyHeadAt(curC)) {
+        } else if (i == 1 && tick.snakeHandler.isEnemyHeadAt(curC)) {
           enemy = true;
           break;
         }

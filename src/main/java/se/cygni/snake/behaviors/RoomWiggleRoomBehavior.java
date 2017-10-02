@@ -18,9 +18,15 @@ public class RoomWiggleRoomBehavior extends Behavior {
   }
 
   @Override
+  protected final boolean canRun() {
+    return true;
+  }
+
+  @Override
   public final HashMap<SnakeDirection, Double> getValues(final List<SnakeDirection> directions) {
     final Room room = new Room(tick);
     final HashMap<SnakeDirection, Double> values = new HashMap<>();
+    final HashMap<SnakeDirection, Double> unprocessedMap = new HashMap<>();
 
     final MapCoordinate curC = tick.mapUtil.getMyPosition();
 
@@ -37,8 +43,8 @@ public class RoomWiggleRoomBehavior extends Behavior {
       final double roomLeft = room.getRoomFrom(tick.movement.getNewCoordinate(SnakeDirection.LEFT, curC)).size();
       final double roomRight = room.getRoomFrom(tick.movement.getNewCoordinate(SnakeDirection.RIGHT, curC)).size();
 
-      values.put(SnakeDirection.LEFT, roomLeft);
-      values.put(SnakeDirection.RIGHT, roomRight);
+      unprocessedMap.put(SnakeDirection.LEFT, roomLeft);
+      unprocessedMap.put(SnakeDirection.RIGHT, roomRight);
       unprocessedValuesUnsorted.add(roomLeft);
       unprocessedValuesUnsorted.add(roomRight);
 
@@ -53,8 +59,8 @@ public class RoomWiggleRoomBehavior extends Behavior {
       final double roomUp = room.getRoomFrom(tick.movement.getNewCoordinate(SnakeDirection.UP, curC)).size();
       final double roomDown = room.getRoomFrom(tick.movement.getNewCoordinate(SnakeDirection.DOWN, curC)).size();
 
-      values.put(SnakeDirection.UP, roomUp);
-      values.put(SnakeDirection.DOWN, roomDown);
+      unprocessedMap.put(SnakeDirection.UP, roomUp);
+      unprocessedMap.put(SnakeDirection.DOWN, roomDown);
       unprocessedValuesUnsorted.add(roomUp);
       unprocessedValuesUnsorted.add(roomDown);
     } else {
@@ -68,8 +74,8 @@ public class RoomWiggleRoomBehavior extends Behavior {
     double value = 0;
 
     for (double curRoom : unprocessedValuesSorted) {
-      for (SnakeDirection direction : values.keySet()) {
-        if (values.get(direction) == curRoom) {
+      for (SnakeDirection direction : unprocessedMap.keySet()) {
+        if (unprocessedMap.get(direction) == curRoom) {
           values.put(direction, value);
         }
       }

@@ -17,9 +17,15 @@ public final class AreaWiggleRoomBehavior extends Behavior {
   }
 
   @Override
+  protected final boolean canRun() {
+    return true;
+  }
+
+  @Override
   public final HashMap<SnakeDirection, Double> getValues(final List<SnakeDirection> directions) {
     final Area area = new Area(tick);
     final HashMap<SnakeDirection, Double> values = new HashMap<>();
+    final HashMap<SnakeDirection, Double> unprocessedMap = new HashMap<>();
 
     final MapCoordinate curC = tick.mapUtil.getMyPosition();
 
@@ -36,8 +42,8 @@ public final class AreaWiggleRoomBehavior extends Behavior {
       final double areaLeft = area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.LEFT, curC)).size();
       final double areaRight = area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.RIGHT, curC)).size();
 
-      values.put(SnakeDirection.LEFT, areaLeft);
-      values.put(SnakeDirection.RIGHT, areaRight);
+      unprocessedMap.put(SnakeDirection.LEFT, areaLeft);
+      unprocessedMap.put(SnakeDirection.RIGHT, areaRight);
       unprocessedValuesUnsorted.add(areaLeft);
       unprocessedValuesUnsorted.add(areaRight);
 
@@ -52,8 +58,8 @@ public final class AreaWiggleRoomBehavior extends Behavior {
       final double areaUp = area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.UP, curC)).size();
       final double areaDown = area.getAreaFrom(tick.movement.getNewCoordinate(SnakeDirection.DOWN, curC)).size();
 
-      values.put(SnakeDirection.UP, areaUp);
-      values.put(SnakeDirection.DOWN, areaDown);
+      unprocessedMap.put(SnakeDirection.UP, areaUp);
+      unprocessedMap.put(SnakeDirection.DOWN, areaDown);
       unprocessedValuesUnsorted.add(areaUp);
       unprocessedValuesUnsorted.add(areaDown);
     } else {
@@ -67,8 +73,8 @@ public final class AreaWiggleRoomBehavior extends Behavior {
     double value = 0;
 
     for (double curArea : unprocessedValuesSorted) {
-      for (SnakeDirection direction : values.keySet()) {
-        if (values.get(direction) == curArea) {
+      for (SnakeDirection direction : unprocessedMap.keySet()) {
+        if (unprocessedMap.get(direction) == curArea) {
           values.put(direction, value);
         }
       }

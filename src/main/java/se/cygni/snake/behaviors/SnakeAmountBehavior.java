@@ -14,6 +14,11 @@ public final class SnakeAmountBehavior extends Behavior {
   }
 
   @Override
+  protected final boolean canRun() {
+    return true;
+  }
+
+  @Override
   public final HashMap<SnakeDirection, Double> getValues(final List<SnakeDirection> directions) {
     final HashMap<SnakeDirection, Double> values = new HashMap<>();
 

@@ -44,8 +44,10 @@ public final class Room {
         moves.add(SnakeDirection.RIGHT);
 
         for (final SnakeDirection move : (List<SnakeDirection>) moves.clone()) {
-          if (!tick.movement.isTileAvailableForMovementTo(
-              tick.movement.getNewCoordinate(move, mapC))) {
+          MapCoordinate next = tick.movement.getNewCoordinate(move, mapC);
+
+          if (!tick.movement.isTileAvailableForMovementTo(next)
+              || isArtificialObstacle(next)) {
             moves.remove(move);
           }
         }

@@ -12,7 +12,8 @@ public final class Area {
 
   private final Tick tick;
 
-  public final ArrayList<MapCoordinate> artificialObstacles = new ArrayList<>();
+  public final List<MapCoordinate> artificialObstacles = new ArrayList<>();
+  public final List<MapCoordinate> allowedTiles = new ArrayList<>();
 
   public Area(Tick tick) {
     this.tick = tick;
@@ -45,7 +46,9 @@ public final class Area {
         moves.add(mapC.translateBy(0, 1));
 
         for (final MapCoordinate move : moves) {
-          if (tick.movement.isTileAvailableForMovementTo(move)) {
+          if ((!isArtificialObstacle(move) &&
+              tick.movement.isTileAvailableForMovementTo(move))
+              || isAllowedTile(move)) {
             final Integer currentPosition = tick.coordinates.translateCoordinate(move);
 
             final int traversableSize = traversable.size();
@@ -64,6 +67,16 @@ public final class Area {
 
   public final boolean isArtificialObstacle(final MapCoordinate coordinate) {
     for (final MapCoordinate curC : artificialObstacles) {
+      if (curC.x == coordinate.x && curC.y == coordinate.y) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public final boolean isAllowedTile(final MapCoordinate coordinate) {
+    for (final MapCoordinate curC : allowedTiles) {
       if (curC.x == coordinate.x && curC.y == coordinate.y) {
         return true;
       }

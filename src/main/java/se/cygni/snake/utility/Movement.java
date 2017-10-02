@@ -88,55 +88,13 @@ public final class Movement {
         final MapCoordinate curPos = new MapCoordinate(tick.mapUtil.getMyPosition().x + x, tick.mapUtil.getMyPosition().y + y);
 
         if (!isTileAvailableForMovementTo(curPos)
-            && !isPartOfThisHeadOrNeck(curPos)) {
+            && !tick.snakeHandler.isPartOfThisHeadOrNeck(curPos)) {
           return true;
         }
       }
     }
 
     return false;
-  }
-
-  public final boolean isPartOfThisHeadOrNeck(final MapCoordinate coordinate) {
-    final MapCoordinate[] snakeSpread = tick.mapUtil.getSnakeSpread(tick.mapUpdateEvent.getReceivingPlayerId());
-
-    return (snakeSpread[0].x == coordinate.x && snakeSpread[0].y == coordinate.y)
-          || (snakeSpread.length > 1 && snakeSpread[1].x == coordinate.x && snakeSpread[1].y == coordinate.y);
-  }
-
-  public final boolean isEnemyHeadAt(final MapCoordinate coordinate) {
-    for (final SnakeInfo enemy : tick.mapUpdateEvent.getMap().getSnakeInfos()) {
-      if (!enemy.isAlive()
-          || enemy.getId().equals(tick.mapUpdateEvent.getReceivingPlayerId())) {
-        continue;
-      }
-
-      final MapCoordinate headPos = tick.mapUtil.translatePosition(enemy.getPositions()[0]);
-
-      if (headPos.x == coordinate.x && headPos.y == coordinate.y) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  public final SnakeInfo getSnake(final MapCoordinate coordinate) {
-    for (final SnakeInfo enemy : tick.mapUpdateEvent.getMap().getSnakeInfos()) {
-      if (!enemy.isAlive()) {
-        continue;
-      }
-
-      for (final int enemyPos : enemy.getPositions()) {
-        final MapCoordinate enemyC = tick.mapUtil.translatePosition(enemyPos);
-
-        if (enemyC.x == coordinate.x && enemyC.y == coordinate.y) {
-          return enemy;
-        }
-      }
-    }
-
-    return null;
   }
 
   public final boolean isAnObstacle(final MapCoordinate coordinate) {

@@ -13,6 +13,11 @@ public final class WiggleRoomBehavior extends Behavior {
   }
 
   @Override
+  protected final boolean canRun() {
+    return true;
+  }
+
+  @Override
   public final HashMap<SnakeDirection, Double> getValues(List<SnakeDirection> directions) {
     final HashMap<SnakeDirection, Double> values = new HashMap<>();
 
