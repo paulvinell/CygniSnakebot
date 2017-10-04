@@ -41,11 +41,11 @@ public abstract class Behavior implements Runnable {
     SnakeDirection bestDirection = SnakeDirection.DOWN;
     final SnakeDirection curDirection = Tick.tick.relativeDirection.getCurrentSnakeDirection();
 
-//    System.out.println();
-//    System.out.println("Sum " + currentTick);
+    System.out.println();
+    System.out.println("Sum " + currentTick);
     synchronized (values) {
       for (SnakeDirection direction : values.keySet()) {
-//        System.out.println(direction + " " + values.get(direction));
+        System.out.println(direction + " " + values.get(direction));
         if (directions.contains(direction) && values.get(direction) > bestScore) {
           bestScore = values.get(direction);
           bestDirection = direction;
@@ -95,21 +95,25 @@ public abstract class Behavior implements Runnable {
   protected abstract boolean canRun();
 
   public final void run() {
+    final long workingTick = tick.mapUpdateEvent.getGameTick();
     if (this.canRun()) {
-      final long workingTick = tick.mapUpdateEvent.getGameTick();
       final HashMap<SnakeDirection, Double> behaviorValues = this.getValues(directions);
 
-      if (currentTick == workingTick) {
-//      System.out.println();
-//      System.out.println(workingTick + " " + this.getClass());
+      if (Behavior.currentTick == workingTick) {
+      System.out.println();
+      System.out.println(workingTick + " " + this.getClass());
         synchronized (values) {
-          for (final SnakeDirection direction : behaviorValues.keySet()) {
-//          System.out.println(direction + " " + behaviorValues.get(direction));
-            values.put(direction, values.get(direction) + behaviorValues.get(direction));
+          if (Behavior.currentTick == workingTick) {
+            for (final SnakeDirection direction : behaviorValues.keySet()) {
+              System.out.println(direction + " " + behaviorValues.get(direction));
+              values.put(direction, values.get(direction) + behaviorValues.get(direction));
+            }
           }
         }
 
-        lastGameTick = workingTick;
+        if (lastGameTick < workingTick) {
+          lastGameTick = workingTick;
+        }
       }
     } else {
       lastGameTick = Behavior.currentTick;

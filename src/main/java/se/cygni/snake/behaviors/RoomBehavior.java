@@ -43,7 +43,7 @@ public final class RoomBehavior extends Behavior {
     double value = 0;
 
     for (final double room : unprocessedValuesSorted) {
-      for (final SnakeDirection direction : unprocessedMap.keySet()) {
+      for (final SnakeDirection direction : directions) {
         if (unprocessedMap.get(direction) == room) {
           values.put(direction, value);
         }

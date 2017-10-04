@@ -55,7 +55,7 @@ public final class AreaBehavior extends Behavior {
     }
 
     for (final double area : unprocessedValuesSorted) {
-      for (final SnakeDirection direction : unprocessedMap.keySet()) {
+      for (final SnakeDirection direction : directions) {
         if (unprocessedMap.get(direction) == area) {
           values.put(direction, value);
         }

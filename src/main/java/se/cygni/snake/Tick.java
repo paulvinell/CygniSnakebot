@@ -26,29 +26,9 @@ import se.cygni.snake.utility.SnakeHandler;
 
 public final class Tick {
 
-  /**
-   * To do:
-   *
-   * indirect snake behavior broken
-   *
-   * add behavior that checks if the room the snake is in can be cut off by other snakes
-   *
-   * http://game.snake.cygni.se/#/viewgame/d63edd72-d65d-4eba-ae2c-c988467532f7?_k=wsjedn
-   * Very very simple, add a behavior that penalizes walking to tiles that enemies' only option is to go to.
-   * Check where they can go, if it's only one tile. Penalize
-   *
-   * http://game.snake.cygni.se/#/viewgame/d2b919b4-d95d-4a3a-a38e-919e13aceb26?_k=fdcujp
-   * fuck
-   *
-   * Only difference is that a wall is besides the snake:
-   * http://game.snake.cygni.se/#/viewgame/c2846515-9d2a-4102-8d61-a5fc8566e639?_k=dgfcnk
-   * avoid this death by adding an artificial tile between snakes and walk toward biggest are
-   *
-   * http://game.snake.cygni.se/#/viewgame/a7ee7e8e-7d20-409f-8a17-f94f80ae34cf?_k=9wprre
-   * check if area calculation is relevant one step forward
-   *
-   * http://game.snake.cygni.se/#/viewgame/23c5f559-a92f-4e8e-bae2-a41693259ec0?_k=l8ct46
-   * ??
+  /*
+    http://game.snake.cygni.se/#/viewgame/f2c4fe6b-6daf-4ef7-9e83-48f5af048f06?_k=3dlbi1
+    area behavior thinks that
    */
 
   public static Tick tick;

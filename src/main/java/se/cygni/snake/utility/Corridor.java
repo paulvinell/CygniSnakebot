@@ -8,17 +8,17 @@ import se.cygni.snake.Tick;
 import se.cygni.snake.api.model.SnakeInfo;
 import se.cygni.snake.client.MapCoordinate;
 
-public class Corridor {
+public final class Corridor {
 
-  private Tick tick;
-  private SnakeInfo snake;
+  private final Tick tick;
+  private final SnakeInfo snake;
 
   private boolean corridor;
   private MapCoordinate lastCorridorTile;
   private MapCoordinate openCorridorTile;
   private int corridorLength;
 
-  public Corridor(Tick tick, SnakeInfo snake) {
+  public Corridor(final Tick tick, final SnakeInfo snake) {
     this.tick = tick;
     this.snake = snake;
 
@@ -30,16 +30,16 @@ public class Corridor {
     calculate();
   }
 
-  private void calculate() {
+  private final void calculate() {
     if (snake.getLength() <= 1) {
       return;
     }
 
-    int headPosInt = snake.getPositions()[0];
-    MapCoordinate headPos = tick.mapUtil.translatePosition(headPosInt);
+    final int headPosInt = snake.getPositions()[0];
+    final MapCoordinate headPos = tick.mapUtil.translatePosition(headPosInt);
 
-    int neckPosInt = snake.getPositions()[1];
-    MapCoordinate neckPos = tick.mapUtil.translatePosition(neckPosInt);
+    final int neckPosInt = snake.getPositions()[1];
+    final MapCoordinate neckPos = tick.mapUtil.translatePosition(neckPosInt);
 
     List<MapCoordinate> moves = getTrueAvailableTilesFrom(headPos);
 
@@ -65,7 +65,7 @@ public class Corridor {
           currentCorridorTile = moves.get(0);
 
           corridorLength++;
-        } else if (moves.size() == 0) {
+        } else if (corridorLength > 0 && moves.size() == 1) {
           corridorLength = 0;
           break;
         } else {
@@ -73,17 +73,15 @@ public class Corridor {
         }
       }
 
-      if (corridorLength > 0) {
-        this.corridor = true;
-        this.lastCorridorTile = lastCorridorTile;
-        this.openCorridorTile = currentCorridorTile;
-        this.corridorLength = corridorLength;
-      }
+      this.corridor = corridorLength > 0;
+      this.lastCorridorTile = lastCorridorTile;
+      this.openCorridorTile = currentCorridorTile;
+      this.corridorLength = corridorLength;
     }
   }
 
-  private List<MapCoordinate> getTrueAvailableTilesFrom(MapCoordinate coordinate) {
-    ArrayList<MapCoordinate> coordinates = new ArrayList<>();
+  private final List<MapCoordinate> getTrueAvailableTilesFrom(final MapCoordinate coordinate) {
+    final ArrayList<MapCoordinate> coordinates = new ArrayList<>();
 
     coordinates.add(coordinate.translateBy(1, 0));
     coordinates.add(coordinate.translateBy(-1, 0));
@@ -95,24 +93,24 @@ public class Corridor {
         .collect(Collectors.toList());
   }
 
-  private List<MapCoordinate> getDiagonalAvailableTilesFrom(MapCoordinate coordinate) {
-    List<MapCoordinate> coordinates = getTrueAvailableTilesFrom(coordinate);
-    List<MapCoordinate> newCoordinates = new ArrayList<>();
+  private final List<MapCoordinate> getDiagonalAvailableTilesFrom(final MapCoordinate coordinate) {
+    final List<MapCoordinate> coordinates = getTrueAvailableTilesFrom(coordinate);
+    final List<MapCoordinate> newCoordinates = new ArrayList<>();
 
-    for (MapCoordinate x : coordinates) {
-      for (MapCoordinate y : coordinates) {
+    for (final MapCoordinate x : coordinates) {
+      for (final MapCoordinate y : coordinates) {
         if (x.x == y.x && x.y == y.y) {
           continue;
         }
 
-        int dX = x.x + y.x - 2 * (coordinate.x);
-        int dY = x.y + y.y - 2 * (coordinate.y);
+        final int dX = x.x + y.x - 2 * (coordinate.x);
+        final int dY = x.y + y.y - 2 * (coordinate.y);
 
         if (dX == 0 && dY == 0) {
           continue;
         }
 
-        MapCoordinate newCoordinate = coordinate.translateBy(dX, dY);
+        final MapCoordinate newCoordinate = coordinate.translateBy(dX, dY);
         if (tick.mapUtil.isTileAvailableForMovementTo(newCoordinate)) {
           newCoordinates.add(newCoordinate);
         }
@@ -122,19 +120,19 @@ public class Corridor {
     return newCoordinates;
   }
 
-  public boolean isInCorridor() {
+  public final boolean isInCorridor() {
     return corridor;
   }
 
-  public MapCoordinate getLastCorridorTile() {
+  public final MapCoordinate getLastCorridorTile() {
     return this.lastCorridorTile;
   }
 
-  public MapCoordinate getOpenCorridorTile() {
+  public final MapCoordinate getOpenCorridorTile() {
     return this.openCorridorTile;
   }
 
-  public int getCorridorLength() {
+  public final int getCorridorLength() {
     return this.corridorLength;
   }
 }
